@@ -1,0 +1,104 @@
+{
+  "988459ce-8f0e-4c3b-b610-bb86940c12db": {
+    "userId": "988459ce-8f0e-4c3b-b610-bb86940c12db",
+    "interviewCount": 0,
+    "practiceCount": 4,
+    "gdCount": 0,
+    "avgScore": 0,
+    "skillScores": {
+      "communication": 0,
+      "confidence": 0,
+      "technical": 0,
+      "bodyLanguage": 0,
+      "eyeContact": 0,
+      "posture": 0
+    },
+    "scoreHistory": [],
+    "updatedAt": "2026-03-07T00:52:37.933Z"
+  },
+  "3ad48be0-3d68-4b71-8458-f9a83d0e4a27": {
+    "userId": "3ad48be0-3d68-4b71-8458-f9a83d0e4a27",
+    "interviewCount": 0,
+    "practiceCount": 0,
+    "gdCount": 0,
+    "avgScore": 0,
+    "skillScores": {
+      "communication": 0,
+      "confidence": 0,
+      "technical": 0,
+      "bodyLanguage": 0,
+      "eyeContact": 0,
+      "posture": 0
+    },
+    "scoreHistory": [],
+    "updatedAt": "2026-03-01T10:25:23.810Z"
+  },
+  "6569b282-09c6-4fdf-a420-efdde0b8b590": {
+    "userId": "6569b282-09c6-4fdf-a420-efdde0b8b590",
+    "interviewCount": 0,
+    "practiceCount": 0,
+    "gdCount": 0,
+    "avgScore": 0,
+    "skillScores": {
+      "communication": 0,
+      "confidence": 0,
+      "technical": 0,
+      "bodyLanguage": 0,
+      "eyeContact": 0,
+      "posture": 0
+    },
+    "scoreHistory": [],
+    "updatedAt": "2026-03-06T23:10:54.125Z"
+  },
+  "eb8a733c-d4a6-4918-b45c-cd30c4a6c020": {
+    "userId": "eb8a733c-d4a6-4918-b45c-cd30c4a6c020",
+    "interviewCount": 0,
+    "practiceCount": 0,
+    "gdCount": 0,
+    "avgScore": 0,
+    "skillScores": {
+      "communication": 0,
+      "confidence": 0,
+      "technical": 0,
+      "bodyLanguage": 0,
+      "eyeContact": 0,
+      "posture": 0
+    },
+    "scoreHistory": [],
+    "updatedAt": "2026-03-06T23:22:14.568Z"
+  },
+  "d19f4818-d179-42d9-8f12-0ecfd8866f0a": {
+    "userId": "d19f4818-d179-42d9-8f12-0ecfd8866f0a",
+    "interviewCount": 0,
+    "practiceCount": 0,
+    "gdCount": 0,
+    "avgScore": 0,
+    "skillScores": {
+      "communication": 0,
+      "confidence": 0,
+      "technical": 0,
+      "bodyLanguage": 0,
+      "eyeContact": 0,
+      "posture": 0
+    },
+    "scoreHistory": [],
+    "updatedAt": "2026-03-07T02:59:04.960Z"
+  },
+  "5828663f-07ed-4bb4-af89-54280ccb9953": {
+    "userId": "5828663f-07ed-4bb4-af89-54280ccb9953",
+    "interviewCount": 0,
+    "practiceCount": 0,
+    "gdCount": 0,
+    "avgScore": 0,
+    "skillScores": {
+      "communication": 0,
+      "confidence": 0,
+      "technical": 0,
+      "bodyLanguage": 0,
+      "eyeContact": 0,
+      "posture": 0
+    },
+    "scoreHistory": [],
+    "updatedAt": "2026-03-08T07:24:39.649Z"
+  }
+}

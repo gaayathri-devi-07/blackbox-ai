@@ -1,0 +1,17 @@
+# Secrets
+backend/firebase-credentials.json
+.env
+.env.local
+
+# Dependencies
+node_modules/
+frontend/node_modules/
+
+# Next.js Build files
+frontend/.next/
+frontend/out/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db

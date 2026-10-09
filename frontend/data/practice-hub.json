@@ -1,0 +1,168 @@
+{
+  "categories": {
+    "hr": {
+      "name": "HR & Behavioral",
+      "icon": "👥",
+      "description": "Common HR and behavioral interview questions",
+      "questions": {
+        "beginner": [
+          { "id": "hr-b-1", "question": "Tell me about yourself", "difficulty": "beginner", "tags": ["introduction", "self-presentation"] },
+          { "id": "hr-b-2", "question": "Why do you want to work here?", "difficulty": "beginner", "tags": ["motivation", "company-research"] },
+          { "id": "hr-b-3", "question": "What are your strengths?", "difficulty": "beginner", "tags": ["self-awareness", "skills"] },
+          { "id": "hr-b-4", "question": "What are your weaknesses?", "difficulty": "beginner", "tags": ["self-awareness", "growth-mindset"] },
+          { "id": "hr-b-5", "question": "Where do you see yourself in 5 years?", "difficulty": "beginner", "tags": ["career-goals", "ambition"] },
+          { "id": "hr-b-6", "question": "Why should we hire you?", "difficulty": "beginner", "tags": ["value-proposition", "confidence"] },
+          { "id": "hr-b-7", "question": "What motivates you?", "difficulty": "beginner", "tags": ["motivation", "work-style"] },
+          { "id": "hr-b-8", "question": "Describe your ideal work environment", "difficulty": "beginner", "tags": ["culture-fit", "preferences"] },
+          { "id": "hr-b-9", "question": "What makes you unique?", "difficulty": "beginner", "tags": ["differentiation", "personal-brand"] },
+          { "id": "hr-b-10", "question": "How do you handle stress?", "difficulty": "beginner", "tags": ["resilience", "coping-mechanisms"] },
+          { "id": "hr-b-11", "question": "What is your greatest achievement?", "difficulty": "beginner", "tags": ["accomplishments", "impact"] },
+          { "id": "hr-b-12", "question": "Why did you leave your last job?", "difficulty": "beginner", "tags": ["career-transition", "professionalism"] },
+          { "id": "hr-b-13", "question": "What is your salary expectation?", "difficulty": "beginner", "tags": ["negotiation", "market-value"] },
+          { "id": "hr-b-14", "question": "How do you prioritize your work?", "difficulty": "beginner", "tags": ["time-management", "organization"] },
+          { "id": "hr-b-15", "question": "What do you know about our company?", "difficulty": "beginner", "tags": ["research", "preparation"] },
+          { "id": "hr-b-16", "question": "What are your hobbies?", "difficulty": "beginner", "tags": ["personality", "work-life-balance"] },
+          { "id": "hr-b-17", "question": "How would your colleagues describe you?", "difficulty": "beginner", "tags": ["self-perception", "teamwork"] },
+          { "id": "hr-b-18", "question": "What is your communication style?", "difficulty": "beginner", "tags": ["communication", "collaboration"] },
+          { "id": "hr-b-19", "question": "How do you learn new skills?", "difficulty": "beginner", "tags": ["learning-agility", "growth"] },
+          { "id": "hr-b-20", "question": "What are your career aspirations?", "difficulty": "beginner", "tags": ["ambition", "long-term-goals"] }
+        ],
+        "intermediate": [
+          { "id": "hr-i-1", "question": "Tell me about a time you faced a difficult challenge", "difficulty": "intermediate", "tags": ["problem-solving", "STAR-method"] },
+          { "id": "hr-i-2", "question": "Describe a time you had a conflict with a team member", "difficulty": "intermediate", "tags": ["conflict-resolution", "interpersonal-skills"] },
+          { "id": "hr-i-3", "question": "Give an example of when you showed leadership", "difficulty": "intermediate", "tags": ["leadership", "initiative"] },
+          { "id": "hr-i-4", "question": "Tell me about a time you failed", "difficulty": "intermediate", "tags": ["resilience", "learning-from-failure"] },
+          { "id": "hr-i-5", "question": "Describe a situation where you had to meet a tight deadline", "difficulty": "intermediate", "tags": ["time-management", "pressure"] },
+          { "id": "hr-i-6", "question": "How do you handle feedback and criticism?", "difficulty": "intermediate", "tags": ["growth-mindset", "receptiveness"] },
+          { "id": "hr-i-7", "question": "Tell me about a time you went above and beyond", "difficulty": "intermediate", "tags": ["dedication", "excellence"] },
+          { "id": "hr-i-8", "question": "Describe your biggest professional mistake", "difficulty": "intermediate", "tags": ["accountability", "learning"] },
+          { "id": "hr-i-9", "question": "How do you deal with ambiguity?", "difficulty": "intermediate", "tags": ["adaptability", "problem-solving"] },
+          { "id": "hr-i-10", "question": "Tell me about a time you had to persuade someone", "difficulty": "intermediate", "tags": ["influence", "communication"] },
+          { "id": "hr-i-11", "question": "Describe a time you worked with a difficult stakeholder", "difficulty": "intermediate", "tags": ["stakeholder-management", "diplomacy"] },
+          { "id": "hr-i-12", "question": "How do you build relationships with new team members?", "difficulty": "intermediate", "tags": ["team-building", "collaboration"] },
+          { "id": "hr-i-13", "question": "Tell me about a time you had to make a difficult decision", "difficulty": "intermediate", "tags": ["decision-making", "judgment"] },
+          { "id": "hr-i-14", "question": "Describe a project where you had to learn something new", "difficulty": "intermediate", "tags": ["learning-agility", "adaptability"] },
+          { "id": "hr-i-15", "question": "How do you handle competing priorities?", "difficulty": "intermediate", "tags": ["prioritization", "organization"] },
+          { "id": "hr-i-16", "question": "Tell me about a time you improved a process", "difficulty": "intermediate", "tags": ["innovation", "efficiency"] },
+          { "id": "hr-i-17", "question": "Describe a situation where you had to work with limited resources", "difficulty": "intermediate", "tags": ["resourcefulness", "creativity"] },
+          { "id": "hr-i-18", "question": "How do you mentor junior team members?", "difficulty": "intermediate", "tags": ["mentorship", "leadership"] },
+          { "id": "hr-i-19", "question": "Tell me about a time you received negative feedback", "difficulty": "intermediate", "tags": ["receptiveness", "growth"] },
+          { "id": "hr-i-20", "question": "Describe your approach to work-life balance", "difficulty": "intermediate", "tags": ["wellness", "sustainability"] }
+        ],
+        "advanced": [
+          { "id": "hr-a-1", "question": "How would you handle a situation where your team disagrees with your decision?", "difficulty": "advanced", "tags": ["leadership", "conflict-management"] },
+          { "id": "hr-a-2", "question": "Describe your approach to driving organizational change", "difficulty": "advanced", "tags": ["change-management", "strategy"] },
+          { "id": "hr-a-3", "question": "How do you balance innovation with risk management?", "difficulty": "advanced", "tags": ["strategic-thinking", "judgment"] },
+          { "id": "hr-a-4", "question": "Tell me about a time you had to challenge senior leadership", "difficulty": "advanced", "tags": ["courage", "influence"] },
+          { "id": "hr-a-5", "question": "How do you build and maintain high-performing teams?", "difficulty": "advanced", "tags": ["team-building", "talent-development"] },
+          { "id": "hr-a-6", "question": "Describe your philosophy on leadership", "difficulty": "advanced", "tags": ["leadership-style", "values"] },
+          { "id": "hr-a-7", "question": "How do you handle ethical dilemmas in the workplace?", "difficulty": "advanced", "tags": ["ethics", "integrity"] },
+          { "id": "hr-a-8", "question": "What is your approach to scaling processes?", "difficulty": "advanced", "tags": ["scalability", "systems-thinking"] },
+          { "id": "hr-a-9", "question": "How do you measure and improve team performance?", "difficulty": "advanced", "tags": ["metrics", "performance-management"] },
+          { "id": "hr-a-10", "question": "Describe a time you had to make a decision with incomplete information", "difficulty": "advanced", "tags": ["decision-making", "risk-assessment"] }
+        ]
+      }
+    },
+    "technical": {
+      "name": "Technical Skills",
+      "icon": "💻",
+      "description": "Technical questions for software and data roles",
+      "questions": {
+        "beginner": [
+          { "id": "tech-b-1", "question": "What is object-oriented programming?", "difficulty": "beginner", "tags": ["fundamentals", "OOP"] },
+          { "id": "tech-b-2", "question": "Explain the difference between var, let, and const", "difficulty": "beginner", "tags": ["javascript", "variables"] },
+          { "id": "tech-b-3", "question": "What is a REST API?", "difficulty": "beginner", "tags": ["api", "web-development"] },
+          { "id": "tech-b-4", "question": "What is the difference between SQL and NoSQL?", "difficulty": "beginner", "tags": ["databases", "data-storage"] },
+          { "id": "tech-b-5", "question": "Explain what Git is and why it's used", "difficulty": "beginner", "tags": ["version-control", "git"] },
+          { "id": "tech-b-6", "question": "What is responsive web design?", "difficulty": "beginner", "tags": ["frontend", "css"] },
+          { "id": "tech-b-7", "question": "What are HTTP methods?", "difficulty": "beginner", "tags": ["http", "web-protocols"] },
+          { "id": "tech-b-8", "question": "Explain what an array is", "difficulty": "beginner", "tags": ["data-structures", "fundamentals"] },
+          { "id": "tech-b-9", "question": "What is a function?", "difficulty": "beginner", "tags": ["programming-basics", "functions"] },
+          { "id": "tech-b-10", "question": "What is debugging?", "difficulty": "beginner", "tags": ["debugging", "problem-solving"] },
+          { "id": "tech-b-11", "question": "What is cloud computing?", "difficulty": "beginner", "tags": ["cloud", "infrastructure"] },
+          { "id": "tech-b-12", "question": "Explain what JSON is", "difficulty": "beginner", "tags": ["data-formats", "json"] },
+          { "id": "tech-b-13", "question": "What is an API?", "difficulty": "beginner", "tags": ["api", "integration"] },
+          { "id": "tech-b-14", "question": "What is a variable?", "difficulty": "beginner", "tags": ["fundamentals", "variables"] },
+          { "id": "tech-b-15", "question": "What is HTML?", "difficulty": "beginner", "tags": ["frontend", "html"] },
+          { "id": "tech-b-16", "question": "What is CSS?", "difficulty": "beginner", "tags": ["frontend", "css"] },
+          { "id": "tech-b-17", "question": "What is a loop?", "difficulty": "beginner", "tags": ["control-flow", "loops"] },
+          { "id": "tech-b-18", "question": "What is an if statement?", "difficulty": "beginner", "tags": ["conditionals", "logic"] },
+          { "id": "tech-b-19", "question": "What is agile methodology?", "difficulty": "beginner", "tags": ["methodology", "agile"] },
+          { "id": "tech-b-20", "question": "What is a framework?", "difficulty": "beginner", "tags": ["frameworks", "tools"] }
+        ],
+        "intermediate": [
+          { "id": "tech-i-1", "question": "Explain the event loop in JavaScript", "difficulty": "intermediate", "tags": ["javascript", "async"] },
+          { "id": "tech-i-2", "question": "What are promises and async/await?", "difficulty": "intermediate", "tags": ["javascript", "async-programming"] },
+          { "id": "tech-i-3", "question": "Describe database indexing and when to use it", "difficulty": "intermediate", "tags": ["databases", "performance"] },
+          { "id": "tech-i-4", "question": "Explain the SOLID principles", "difficulty": "intermediate", "tags": ["design-patterns", "best-practices"] },
+          { "id": "tech-i-5", "question": "What is middleware in Express.js?", "difficulty": "intermediate", "tags": ["nodejs", "backend"] },
+          { "id": "tech-i-6", "question": "Explain React hooks and their use cases", "difficulty": "intermediate", "tags": ["react", "frontend"] },
+          { "id": "tech-i-7", "question": "What is dependency injection?", "difficulty": "intermediate", "tags": ["design-patterns", "architecture"] },
+          { "id": "tech-i-8", "question": "Describe microservices architecture", "difficulty": "intermediate", "tags": ["architecture", "scalability"] },
+          { "id": "tech-i-9", "question": "What are design patterns? Give examples", "difficulty": "intermediate", "tags": ["design-patterns", "software-engineering"] },
+          { "id": "tech-i-10", "question": "Explain caching strategies", "difficulty": "intermediate", "tags": ["performance", "optimization"] },
+          { "id": "tech-i-11", "question": "What is CI/CD?", "difficulty": "intermediate", "tags": ["devops", "automation"] },
+          { "id": "tech-i-12", "question": "Explain database normalization", "difficulty": "intermediate", "tags": ["databases", "data-modeling"] },
+          { "id": "tech-i-13", "question": "What is test-driven development?", "difficulty": "intermediate", "tags": ["testing", "methodology"] },
+          { "id": "tech-i-14", "question": "Describe authentication vs authorization", "difficulty": "intermediate", "tags": ["security", "auth"] },
+          { "id": "tech-i-15", "question": "What are web sockets?", "difficulty": "intermediate", "tags": ["real-time", "networking"] },
+          { "id": "tech-i-16", "question": "Explain Docker and containerization", "difficulty": "intermediate", "tags": ["devops", "containers"] },
+          { "id": "tech-i-17", "question": "What is Redux and when should you use it?", "difficulty": "intermediate", "tags": ["react", "state-management"] },
+          { "id": "tech-i-18", "question": "Describe API rate limiting", "difficulty": "intermediate", "tags": ["api", "scalability"] },
+          { "id": "tech-i-19", "question": "What is GraphQL?", "difficulty": "intermediate", "tags": ["api", "query-language"] },
+          { "id": "tech-i-20", "question": "Explain load balancing", "difficulty": "intermediate", "tags": ["infrastructure", "scalability"] }
+        ],
+        "advanced": [
+          { "id": "tech-a-1", "question": "Design a URL shortener system", "difficulty": "advanced", "tags": ["system-design", "scalability"] },
+          { "id": "tech-a-2", "question": "How would you design a distributed cache?", "difficulty": "advanced", "tags": ["distributed-systems", "architecture"] },
+          { "id": "tech-a-3", "question": "Explain CAP theorem and its implications", "difficulty": "advanced", "tags": ["distributed-systems", "theory"] },
+          { "id": "tech-a-4", "question": "Design a real-time messaging system", "difficulty": "advanced", "tags": ["system-design", "real-time"] },
+          { "id": "tech-a-5", "question": "How would you handle database sharding?", "difficulty": "advanced", "tags": ["databases", "scalability"] },
+          { "id": "tech-a-6", "question": "Design a rate limiter for an API", "difficulty": "advanced", "tags": ["system-design", "api"] },
+          { "id": "tech-a-7", "question": "Explain eventual consistency", "difficulty": "advanced", "tags": ["distributed-systems", "consistency"] },
+          { "id": "tech-a-8", "question": "How would you design Twitter's timeline?", "difficulty": "advanced", "tags": ["system-design", "social-media"] },
+          { "id": "tech-a-9", "question": "Design a file storage system like Dropbox", "difficulty": "advanced", "tags": ["system-design", "storage"] },
+          { "id": "tech-a-10", "question": "Explain consensus algorithms in distributed systems", "difficulty": "advanced", "tags": ["distributed-systems", "algorithms"] }
+        ]
+      }
+    },
+    "bodyLanguage": {
+      "name": "Body Language",
+      "icon": "🎭",
+      "description": "Non-verbal communication and presence",
+      "questions": {
+        "beginner": [
+          { "id": "body-b-1", "question": "Maintain eye contact throughout your answer", "difficulty": "beginner", "tags": ["eye-contact", "confidence"] },
+          { "id": "body-b-2", "question": "Smile naturally while answering", "difficulty": "beginner", "tags": ["facial-expressions", "warmth"] },
+          { "id": "body-b-3", "question": "Sit up straight and maintain good posture", "difficulty": "beginner", "tags": ["posture", "professionalism"] },
+          { "id": "body-b-4", "question": "Use hand gestures to emphasize points", "difficulty": "beginner", "tags": ["gestures", "emphasis"] },
+          { "id": "body-b-5", "question": "Nod to show understanding", "difficulty": "beginner", "tags": ["active-listening", "engagement"] },
+          { "id": "body-b-6", "question": "Keep your hands visible and relaxed", "difficulty": "beginner", "tags": ["openness", "confidence"] },
+          { "id": "body-b-7", "question": "Avoid crossing your arms", "difficulty": "beginner", "tags": ["openness", "receptiveness"] },
+          { "id": "body-b-8", "question": "Lean slightly forward to show interest", "difficulty": "beginner", "tags": ["engagement", "interest"] },
+          { "id": "body-b-9", "question": "Control nervous habits (fidgeting, tapping)", "difficulty": "beginner", "tags": ["composure", "professionalism"] },
+          { "id": "body-b-10", "question": "Mirror the interviewer's energy level", "difficulty": "beginner", "tags": ["rapport", "mirroring"] }
+        ],
+        "intermediate": [
+          { "id": "body-i-1", "question": "Use the power pose before the interview", "difficulty": "intermediate", "tags": ["confidence", "preparation"] },
+          { "id": "body-i-2", "question": "Manage your facial expressions during tough questions", "difficulty": "intermediate", "tags": ["composure", "emotional-intelligence"] },
+          { "id": "body-i-3", "question": "Use strategic pauses for emphasis", "difficulty": "intermediate", "tags": ["pacing", "impact"] },
+          { "id": "body-i-4", "question": "Adjust your tone based on the topic", "difficulty": "intermediate", "tags": ["vocal-variety", "communication"] },
+          { "id": "body-i-5", "question": "Read the interviewer's body language", "difficulty": "intermediate", "tags": ["perception", "awareness"] },
+          { "id": "body-i-6", "question": "Demonstrate active listening through body language", "difficulty": "intermediate", "tags": ["listening", "engagement"] },
+          { "id": "body-i-7", "question": "Maintain energy throughout a long interview", "difficulty": "intermediate", "tags": ["stamina", "enthusiasm"] },
+          { "id": "body-i-8", "question": "Use open palm gestures to build trust", "difficulty": "intermediate", "tags": ["trust", "openness"] },
+          { "id": "body-i-9", "question": "Control your breathing to stay calm", "difficulty": "intermediate", "tags": ["composure", "stress-management"] },
+          { "id": "body-i-10", "question": "Project confidence even when uncertain", "difficulty": "intermediate", "tags": ["confidence", "poise"] }
+        ],
+        "advanced": [
+          { "id": "body-a-1", "question": "Master micro-expressions to convey authenticity", "difficulty": "advanced", "tags": ["micro-expressions", "authenticity"] },
+          { "id": "body-a-2", "question": "Use body language to build instant rapport", "difficulty": "advanced", "tags": ["rapport", "influence"] },
+          { "id": "body-a-3", "question": "Adapt your communication style to different interviewers", "difficulty": "advanced", "tags": ["adaptability", "perception"] },
+          { "id": "body-a-4", "question": "Use spatial positioning to your advantage", "difficulty": "advanced", "tags": ["proxemics", "presence"] },
+          { "id": "body-a-5", "question": "Command the room in panel interviews", "difficulty": "advanced", "tags": ["presence", "confidence"] }
+        ]
+      }
+    }
+  }
+}
