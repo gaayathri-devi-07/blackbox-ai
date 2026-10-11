@@ -55,15 +55,18 @@ const NOTES: Record<Emotion, string> = {
 };
 
 /** Director's note for Gemini TTS. */
+/** Director's note for Gemini TTS. */
 export function performanceNote(emotion: Emotion, hint: DeliveryHint = {}): string {
   const who =
     hint.role === "moderator"
       ? "a calm group-discussion moderator"
       : hint.role === "panelist"
-        ? `a fellow candidate in a group discussion${hint.persona?.trait ? ` who is ${hint.persona.trait}` : ""}`
+        ? `a fellow candidate in a group discussion${hint.persona?.trait ? ` who is \${hint.persona.trait}` : ""}`
         : "an experienced interviewer talking with a candidate";
   const name = hint.persona?.name ? `${hint.persona.name}, ` : "";
   
+  // This is the missing line that fixes the crash:
+  return `You are ${name}${who}. Your delivery should be ${NOTES[emotion]}.`;
 }
 
 const MARKERS = /^(okay|ok|alright|all right|so|right|great|good|hmm|well|now|sure|got it|i see|interesting|nice|perfect|thanks|thank you)[,.!]?\s+/i;
