@@ -1,0 +1,331 @@
+<title>Blackbox AI Upgrade Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+<style>
+/* Layout: one reading column with a sticky contents rail on wide screens; tables scroll in place. */
+:root {
+  --bg: #f6f7f2;
+  --surface: #ffffff;
+  --ink: #1f3329;
+  --muted: #56685e;
+  --line: #d9e0d4;
+  --accent: #3f6e57;
+  --accent-soft: #e5eee7;
+  --warn: #9a6a12;
+  --warn-soft: #f6ecd8;
+  --good: #2f7a4b;
+  --good-soft: #e1f0e5;
+  --font-display: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --font-body: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141c18; --surface: #1b2520; --ink: #e8efe9; --muted: #a3b4a9; --line: #2f3c35;
+    --accent: #8fc3a5; --accent-soft: #23352c; --warn: #e2b866; --warn-soft: #3a3020;
+    --good: #85c99d; --good-soft: #1f3528; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141c18; --surface: #1b2520; --ink: #e8efe9; --muted: #a3b4a9; --line: #2f3c35;
+  --accent: #8fc3a5; --accent-soft: #23352c; --warn: #e2b866; --warn-soft: #3a3020;
+  --good: #85c99d; --good-soft: #1f3528; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.65 var(--font-body); padding-inline: 16px; padding-block: 40px 80px; }
+.wrap { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; }
+@media (max-width: 900px) { .wrap { grid-template-columns: minmax(0, 1fr); } nav.toc { display: none; } }
+
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 24px); align-self: start; font-size: 13px; }
+nav.toc p { font: 500 11px/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 12px; }
+nav.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+nav.toc a { display: block; padding: 5px 10px; border-left: 2px solid var(--line); color: var(--muted); text-decoration: none; }
+nav.toc a:hover, nav.toc a:focus-visible { color: var(--ink); border-left-color: var(--accent); outline: none; }
+
+main { min-width: 0; max-width: 760px; }
+header.doc { border-bottom: 1px solid var(--line); padding-bottom: 28px; margin-bottom: 8px; }
+.eyebrow { font: 500 11px/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+h1 { font: 400 clamp(2.2rem, 5vw, 3.2rem)/1.05 var(--font-display); letter-spacing: -.01em; margin: 14px 0 12px; text-wrap: balance; }
+h1 em { color: var(--accent); }
+.lede { color: var(--muted); font-size: 16.5px; max-width: 62ch; margin: 0; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 18px; font: 12.5px/1.4 var(--font-mono); color: var(--muted); }
+
+section { padding-block: 36px 8px; border-bottom: 1px solid var(--line); }
+section:last-of-type { border-bottom: 0; }
+h2 { font: 400 1.85rem/1.15 var(--font-display); margin: 0 0 6px; text-wrap: balance; scroll-margin-top: 24px; }
+h2 + .sub { color: var(--muted); margin: 0 0 18px; }
+h3 { font: 600 15px/1.4 var(--font-body); margin: 24px 0 8px; }
+p { margin: 0 0 14px; max-width: 68ch; }
+ul, ol { margin: 0 0 14px; padding-left: 20px; max-width: 68ch; }
+li { margin-bottom: 6px; }
+code { font: 13px var(--font-mono); background: var(--accent-soft); padding: 1px 5px; border-radius: 4px; }
+strong { font-weight: 600; }
+
+.table { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); margin: 6px 0 18px; }
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 13.5px; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 500 11px/1.3 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); background: var(--bg); }
+tr:last-child td { border-bottom: 0; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--font-mono); }
+tr.us td { background: var(--accent-soft); font-weight: 500; }
+.dots { font-family: var(--font-mono); letter-spacing: 1px; color: var(--accent); white-space: nowrap; }
+
+.pill { display: inline-block; font: 500 11px/1 var(--font-mono); padding: 4px 7px; border-radius: 999px; white-space: nowrap; }
+.done { background: var(--good-soft); color: var(--good); }
+.next { background: var(--warn-soft); color: var(--warn); }
+.later { background: var(--accent-soft); color: var(--accent); }
+
+.usp { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 8px 0 18px; }
+@media (max-width: 640px) { .usp { grid-template-columns: minmax(0, 1fr); } }
+.usp div { border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; background: var(--surface); min-width: 0; }
+.usp b { display: block; font-weight: 600; margin-bottom: 4px; }
+.usp span { color: var(--muted); font-size: 13.5px; }
+
+.note { border-left: 3px solid var(--warn); background: var(--warn-soft); padding: 10px 14px; border-radius: 0 8px 8px 0; font-size: 13.5px; margin: 6px 0 18px; max-width: 68ch; }
+pre.mermaid { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; overflow-x: auto; margin: 6px 0 18px; }
+.sources li { font-size: 13px; color: var(--muted); }
+.sources a { color: var(--accent); }
+a { color: var(--accent); }
+</style>
+
+<div class="wrap">
+  <nav class="toc" aria-label="Contents">
+    <p>Contents</p>
+    <ol>
+      <li><a href="#status">Status</a></li>
+      <li><a href="#market">Market ranking</a></li>
+      <li><a href="#usp">Novelty and USPs</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#rag">RAG</a></li>
+      <li><a href="#agents">Agentic systems</a></li>
+      <li><a href="#evals">Evals in LangSmith</a></li>
+      <li><a href="#governance">Governance and PII</a></li>
+      <li><a href="#offline">Online and offline</a></li>
+      <li><a href="#roadmap">Roadmap</a></li>
+      <li><a href="#risks">Risks</a></li>
+      <li><a href="#sources">Sources</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <header class="doc">
+      <span class="eyebrow">Implementation plan · Blackbox interview preparation</span>
+      <h1>RAG, agents, evals and governance, <em>built in</em></h1>
+      <p class="lede">What was added to Blackbox to make it production-ready, where Blackbox stands against the interview-prep apps available today, and what to build next.</p>
+      <div class="meta"><span>10 October 2026</span><span>Next.js 16 · PostgreSQL · Gemini · LangSmith</span><span>46 unit tests · 5 eval suites passing</span></div>
+    </header>
+
+    <section id="status">
+      <h2>Status</h2>
+      <p class="sub">Everything below marked <span class="pill done">Built</span> is in the codebase, tested, and runs locally today.</p>
+      <div class="table"><table>
+        <thead><tr><th>Request</th><th>What exists now</th><th>State</th></tr></thead>
+        <tbody>
+          <tr><td>RAG</td><td>Hybrid retrieval (Postgres full-text + Gemini embeddings, reciprocal rank fusion) over 564 passages: 500 bank answers, 47 study-note sections, company profiles, GD topics. Used by coach chat, interviewer coaching, answer feedback, job-description tailoring and the planner.</td><td><span class="pill done">Built</span></td></tr>
+          <tr><td>Agentic system</td><td>Governed tool-calling runtime on Gemini function calling. Prep Planner agent with four read-only tools writes the weekly plan on the dashboard and shows its tool trace. Offline twin uses the same tools with rules. GD room is multi-agent (four panelists and a moderator).</td><td><span class="pill done">Built</span></td></tr>
+          <tr><td>Evals in LangSmith</td><td>Golden datasets and quality gates for retrieval, PII masking, injection detection, grader calibration and voice emotion, plus an LLM-as-judge suite when online. <code>npm run eval:langsmith</code> uploads datasets and records experiments. Production tracing with masked payloads. CI runs the gates.</td><td><span class="pill done">Built</span></td></tr>
+          <tr><td>Governance and PII masking</td><td>Reversible masking of emails, phones, Aadhaar (Verhoeff), PAN, cards (Luhn), SSN, IPs, API keys and names before any model or trace. Prompt-injection guard, AI audit log, per-user Privacy &amp; AI panel, updated privacy policy.</td><td><span class="pill done">Built</span></td></tr>
+          <tr><td>Online / offline</td><td>Live Gemini when available; circuit breaker falls back to the question bank, rule-based scoring and offline planner. Status shown in the top bar.</td><td><span class="pill done">Built</span></td></tr>
+          <tr><td>Firebase sign-in</td><td>Google and GitHub restored (both providers verified enabled on the project), popup with redirect fallback.</td><td><span class="pill done">Built</span></td></tr>
+          <tr><td>Voice</td><td>Emotion inferred per line (warm, curious, reassuring, serious…). Gemini TTS gets a performance note and breath marks; the browser voice gets per-phrase pitch, pace and thinking pauses.</td><td><span class="pill done">Built</span></td></tr>
+          <tr><td>Deployment</td><td>Dockerfile (standalone), Vercel build script, CI workflow, startup env checks, health endpoint.</td><td><span class="pill done">Built</span></td></tr>
+          <tr><td>Live AI</td><td>Gemini key added: live interviewer (1.5–3.5 s per turn), streamed voice (first sound ≈2.5 s after Begin), Gemini transcription (≈3.5 s for a 20 s answer) and all 564 passages embedded. LangSmith key still to add.</td><td><span class="pill done">Live</span> <span class="pill next">LangSmith key</span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section id="market">
+      <h2>Market ranking</h2>
+      <p class="sub">Blackbox against the tools candidates use in 2026, weighted for our segment: Indian campus and early-career tech candidates.</p>
+      <div class="note">Scores are our assessment from public reviews and vendor pages (sources below), not measured user outcomes. Several sources are written by competitors. Blackbox has not yet been validated with real users, so its row shows capability, not traction.</div>
+      <div class="table"><table>
+        <thead><tr><th>#</th><th>Product</th><th>Realism (20)</th><th>Content feedback (15)</th><th>Delivery (10)</th><th>GD / placement (15)</th><th>Personalisation (15)</th><th>Privacy (10)</th><th>Cost / offline (15)</th><th class="num">Score / 5</th></tr></thead>
+        <tbody>
+          <tr class="us"><td>1</td><td>Blackbox</td><td class="dots">●●●●○</td><td class="dots">●●●●○</td><td class="dots">●●●●○</td><td class="dots">●●●●●</td><td class="dots">●●●●○</td><td class="dots">●●●●●</td><td class="dots">●●●●●</td><td class="num">4.40</td></tr>
+          <tr><td>2</td><td>Cloudvyn (GD simulator + AI interviews, India)</td><td class="dots">●●●○○</td><td class="dots">●●●○○</td><td class="dots">●●●○○</td><td class="dots">●●●●●</td><td class="dots">●●●○○</td><td class="dots">●●○○○</td><td class="dots">●●●●○</td><td class="num">3.35</td></tr>
+          <tr><td>3</td><td>Final Round AI (mock + live copilot, ~$148/mo)</td><td class="dots">●●●●●</td><td class="dots">●●●●○</td><td class="dots">●●●○○</td><td class="dots">●○○○○</td><td class="dots">●●●●●</td><td class="dots">●●○○○</td><td class="dots">●○○○○</td><td class="num">3.15</td></tr>
+          <tr><td>4</td><td>interviewing.io (human mocks, ~$179+/session)</td><td class="dots">●●●●●</td><td class="dots">●●●●●</td><td class="dots">●●○○○</td><td class="dots">●○○○○</td><td class="dots">●●●○○</td><td class="dots">●●●●○</td><td class="dots">●○○○○</td><td class="num">3.10</td></tr>
+          <tr><td>5</td><td>Huru (JD-based video mocks, ~$99/yr)</td><td class="dots">●●●○○</td><td class="dots">●●●○○</td><td class="dots">●●●●○</td><td class="dots">●○○○○</td><td class="dots">●●●●○</td><td class="dots">●●○○○</td><td class="dots">●●●○○</td><td class="num">2.85</td></tr>
+          <tr><td>6</td><td>Yoodli (speech coach, $8–20/mo)</td><td class="dots">●●●○○</td><td class="dots">●●○○○</td><td class="dots">●●●●●</td><td class="dots">●○○○○</td><td class="dots">●●○○○</td><td class="dots">●●●○○</td><td class="dots">●●●●○</td><td class="num">2.75</td></tr>
+          <tr><td>7</td><td>Pramp / Exponent (peer mocks, courses)</td><td class="dots">●●●●○</td><td class="dots">●●●○○</td><td class="dots">●○○○○</td><td class="dots">●○○○○</td><td class="dots">●●○○○</td><td class="dots">●●●○○</td><td class="dots">●●●●○</td><td class="num">2.70</td></tr>
+          <tr><td>8</td><td>Gemini Live (free general assistant)</td><td class="dots">●●●○○</td><td class="dots">●●●○○</td><td class="dots">●○○○○</td><td class="dots">●○○○○</td><td class="dots">●●○○○</td><td class="dots">●●○○○</td><td class="dots">●●●●●</td><td class="num">2.55</td></tr>
+          <tr><td>9</td><td>Big Interview (curriculum, $39/mo)</td><td class="dots">●●○○○</td><td class="dots">●●○○○</td><td class="dots">●●●●○</td><td class="dots">●○○○○</td><td class="dots">●●○○○</td><td class="dots">●●●○○</td><td class="dots">●●●○○</td><td class="num">2.30</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Where Blackbox still loses</h3>
+      <ul>
+        <li><strong>Distribution and trust.</strong> No users, reviews or college partnerships yet; every competitor above has them.</li>
+        <li><strong>Résumé upload.</strong> Final Round, Huru and Sparklane build interviews from a résumé. We tailor to a pasted job description and the profile, not yet a résumé file.</li>
+        <li><strong>Coding round.</strong> DevInterview.AI and Pramp have a runnable code editor; we have none.</li>
+        <li><strong>Human experts.</strong> interviewing.io sells real engineers; we have no human review path.</li>
+        <li><strong>Languages and mobile.</strong> Huru and Verve support many languages and a phone app; we are English-only and web-only.</li>
+      </ul>
+    </section>
+
+    <section id="usp">
+      <h2>Novelty and USPs</h2>
+      <p class="sub">What no single competitor above combines today.</p>
+      <div class="usp">
+        <div><b>The whole placement loop in one place</b><span>Mock interviews, AI group discussions with real floor control, a 500-question bank and project defence, scored on one readiness record. Interview-only tools skip the GD round; GD tools have thin interviews.</span></div>
+        <div><b>Private by construction</b><span>Whisper transcription and eye-contact analysis run in the browser; recordings and video never leave the device. Text that does leave is PII-masked, including Aadhaar and PAN, which matters under India's DPDP Act.</span></div>
+        <div><b>Works without AI or internet to the model</b><span>A curated bank, rule-based scoring and an offline planner mean a student with no paid key still gets the full product. Competitors stop working without their backend model.</span></div>
+        <div><b>Feedback you can check</b><span>Coaching and study pointers cite retrieved passages, and the planner shows the tool calls behind its plan. Most tools give unexplained scores.</span></div>
+        <div><b>An interviewer that feels human</b><span>Emotion-directed voice, follow-ups on your own projects, hints when you're stuck, an editable transcript. Most voice mocks read questions in one flat tone.</span></div>
+        <div><b>Practice, never cheating</b><span>No live "copilot" that feeds answers during real interviews. Reviewers flag that as the main ethics risk of Final Round, Verve and LockedIn; it is our trust advantage with colleges.</span></div>
+      </div>
+    </section>
+
+    <section id="architecture">
+      <h2>Architecture</h2>
+      <p class="sub">Every model call goes through one governed path; every feature has an offline twin.</p>
+<pre class="mermaid">
+flowchart LR
+  U[Candidate in browser] -->|Whisper + MediaPipe on device| B[Next.js app]
+  B --> API[API route + AI context: user, feature, request id]
+  API --> RAG[Hybrid retrieval: Postgres FTS + embeddings]
+  API --> AG[Agent runtime: tools, step budget]
+  API --> G[Governed Gemini client]
+  RAG --> G
+  AG --> G
+  G --> M1[1 PII masking]
+  M1 --> M2[2 Guardrail preamble + injection flags]
+  M2 --> M3{3 Circuit breaker}
+  M3 -->|live| GEM[(Gemini)]
+  M3 -->|offline| OFF[Question bank + rules]
+  G --> T[4 LangSmith trace, masked]
+  G --> A[5 Audit row: counts only]
+  GEM --> UN[Un-mask reply] --> U
+</pre>
+      <p>Key files: <code>lib/ai/gemini.ts</code> (pipeline), <code>lib/ai/availability.ts</code> (circuit breaker), <code>lib/rag/</code>, <code>lib/agents/</code>, <code>lib/governance/</code>, <code>lib/observability/tracing.ts</code>, <code>evals/</code>.</p>
+    </section>
+
+    <section id="rag">
+      <h2>RAG</h2>
+      <p class="sub">Grounding the interviewer and coach in content we control.</p>
+      <h3>Where it is used</h3>
+      <div class="table"><table>
+        <thead><tr><th>Feature</th><th>Query</th><th>What retrieval changes</th></tr></thead>
+        <tbody>
+          <tr><td>Coach chat</td><td>Message + open question</td><td>Answers cite [1], [2] with sources; offline answers are built from retrieved notes instead of a canned message.</td></tr>
+          <tr><td>Interviewer coaching</td><td>The question the candidate is stuck on</td><td>Hints come from the study notes and model answers, not model memory.</td></tr>
+          <tr><td>Per-answer feedback</td><td>The question</td><td>Ideal answer and "what to study" are grounded; offline uses the closest bank answer.</td></tr>
+          <tr><td>Job-description tailoring</td><td>Pasted job description</td><td>Offline, the technical questions are the bank questions closest to the job; online, the JD shapes the prompt.</td></tr>
+          <tr><td>Prep Planner</td><td>Weak topics</td><td>The agent's <code>search_knowledge</code> tool picks what to study.</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Design</h3>
+      <ul>
+        <li><strong>Corpus</strong> (<code>lib/rag/sync.ts</code>): question bank, curated notes (<code>lib/rag/knowledge.ts</code>), company profiles, GD topics. Content-hashed, so re-sync only touches changed chunks. Runs on every seed and via <code>npm run rag:ingest</code>.</li>
+        <li><strong>Keyword</strong>: generated <code>tsvector</code> column with a GIN index, title weighted above body, re-ranked by query-term coverage.</li>
+        <li><strong>Vector</strong>: <code>gemini-embedding-001</code> at 768 dimensions, normalised, cached in memory (about 6 MB). Queries are PII-masked before embedding.</li>
+        <li><strong>Fusion</strong>: reciprocal rank fusion (k = 60) plus small boosts for the candidate's track and the question's category.</li>
+      </ul>
+      <h3>Next</h3>
+      <ul>
+        <li>Move vectors to <code>pgvector</code> with an HNSW index once the corpus passes ~20k chunks.</li>
+        <li>Résumé upload as a per-user, private collection (masked, deletable), retrieved for project follow-ups.</li>
+        <li>A cross-encoder re-ranker if MRR stays below 0.8 with embeddings on.</li>
+      </ul>
+    </section>
+
+    <section id="agents">
+      <h2>Agentic systems</h2>
+      <p class="sub">Agents where they plan or investigate; deterministic code where the outcome must be exact.</p>
+      <div class="table"><table>
+        <thead><tr><th>Agent</th><th>Tools</th><th>Guardrails</th><th>State</th></tr></thead>
+        <tbody>
+          <tr><td>Prep Planner (dashboard)</td><td>get_candidate_profile, get_performance_summary, find_practice_questions, search_knowledge</td><td>Read-only tools, zod-validated args, 7-step budget, JSON plan validated, in-app links only, tool trace shown to the user</td><td><span class="pill done">Built</span></td></tr>
+          <tr><td>GD panel (four panelists + moderator)</td><td>Floor-control lock, topic packs, conversation history</td><td>Exclusive floor lock, watchdogs, offline argument packs</td><td><span class="pill done">Built</span></td></tr>
+          <tr><td>Coach agent</td><td>Planner tools + explain_question, log_weak_topic</td><td>Writes only to the user's own study list, with confirmation</td><td><span class="pill next">Next</span></td></tr>
+          <tr><td>Panel interview</td><td>Two interviewer agents (technical + HR) sharing the transcript</td><td>Turn-taking via the GD floor-control engine</td><td><span class="pill later">Later</span></td></tr>
+          <tr><td>Follow-up agent</td><td>Schedules spaced-repetition reviews of missed key points</td><td>Notifications opt-in, user-visible queue</td><td><span class="pill later">Later</span></td></tr>
+        </tbody>
+      </table></div>
+      <p>The runtime (<code>lib/agents/runtime.ts</code>) masks tool results before they return to the model, restores placeholders in tool arguments, audits every step, and traces the whole run as one LangSmith tree.</p>
+    </section>
+
+    <section id="evals">
+      <h2>Evals in LangSmith</h2>
+      <p class="sub">Golden datasets live in the repo (<code>evals/datasets.ts</code>); gates block regressions in CI.</p>
+      <div class="table"><table>
+        <thead><tr><th>Suite</th><th>n</th><th>Metric</th><th class="num">Gate</th><th class="num">Today</th></tr></thead>
+        <tbody>
+          <tr><td>rag-retrieval</td><td>22</td><td>hit@5 / MRR (keyword only → hybrid with embeddings)</td><td class="num">0.85 / 0.60</td><td class="num">1.00 / 0.73 → 1.00 / 0.90</td></tr>
+          <tr><td>pii-masking</td><td>14</td><td>exact match (incl. numbers that must stay)</td><td class="num">0.95</td><td class="num">1.00</td></tr>
+          <tr><td>prompt-injection</td><td>10</td><td>correct flag</td><td class="num">0.90</td><td class="num">1.00</td></tr>
+          <tr><td>offline-grader</td><td>6</td><td>score band match</td><td class="num">0.80</td><td class="num">1.00</td></tr>
+          <tr><td>voice-emotion</td><td>6</td><td>exact match</td><td class="num">0.80</td><td class="num">1.00</td></tr>
+          <tr><td>feedback-quality (online)</td><td>3</td><td>LLM judge: grounded, actionable</td><td class="num">0.70</td><td class="num">needs key</td></tr>
+        </tbody>
+      </table></div>
+      <ul>
+        <li><code>npm run eval</code> runs locally; <code>npm run eval:langsmith</code> creates or refreshes datasets <code>blackbox-*</code> and records one experiment per suite.</li>
+        <li>Production tracing: <code>LANGSMITH_TRACING=true</code>. Payloads are masked before the call and again in <code>processInputs</code>/<code>processOutputs</code>; users appear only as pseudonymous ids.</li>
+        <li>Next: grow each dataset to 50–100 examples from real (consented, masked) sessions, and add online feedback scores from the "Was this helpful?" control.</li>
+      </ul>
+    </section>
+
+    <section id="governance">
+      <h2>Governance and PII</h2>
+      <p class="sub">Controls mapped to the obligations a reviewer will ask about.</p>
+      <div class="table"><table>
+        <thead><tr><th>Control</th><th>Implementation</th><th>Evidence</th></tr></thead>
+        <tbody>
+          <tr><td>PII masking</td><td><code>lib/governance/pii.ts</code>: typed, reversible placeholders; checksums for Aadhaar and cards to avoid masking technical numbers</td><td>11 unit tests, eval gate 0.95</td></tr>
+          <tr><td>Prompt-injection defence</td><td>Data-not-instructions preamble on every system prompt; heuristic flags in <code>guard.ts</code></td><td>Eval gate 0.90; flags counted in audit</td></tr>
+          <tr><td>Audit trail</td><td><code>ai_events</code>: feature, operation, model, outcome, latency, sizes, mask counts. Never text</td><td>Per-user view in Settings → Privacy &amp; AI</td></tr>
+          <tr><td>Data minimisation</td><td>Whisper and camera analysis on device; video never uploaded</td><td>Privacy policy, CSP</td></tr>
+          <tr><td>User rights (DPDP Act 2023)</td><td>Account deletion cascades to every table, including audit rows and plans</td><td>Settings → Delete account</td></tr>
+          <tr><td>Kill switches</td><td><code>PII_MASKING</code>, <code>AI_AUDIT_LOG</code>, circuit breaker; startup warning if masking is turned off</td><td><code>instrumentation.ts</code></td></tr>
+        </tbody>
+      </table></div>
+      <p>Next: retention window for <code>ai_events</code> (90 days), an admin view across users, and a model card listing which features call which model.</p>
+    </section>
+
+    <section id="offline">
+      <h2>Online and offline</h2>
+      <p class="sub">The question asked was whether to use Gemini online and the stored questions offline. Yes, and it is built that way.</p>
+      <p>Gemini makes the interviewer adaptive, grounds feedback, voices lines expressively and lets the planner reason. The curated bank keeps the product useful with no key, no budget or a failed connection, and it is the source RAG grounds Gemini in. A circuit breaker switches modes automatically after three failures and retries after a minute; the top bar tells the candidate which mode they are in.</p>
+      <p>One limit to state plainly: "offline" means offline from the AI provider. The app still needs its own server. A fully offline phone experience would need a PWA with a cached question subset, which is on the roadmap.</p>
+    </section>
+
+    <section id="roadmap">
+      <h2>Roadmap</h2>
+      <div class="table"><table>
+        <thead><tr><th>Phase</th><th>Work</th><th>Exit criteria</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pill done">0 · Done</span></td><td>Everything in Status above</td><td>Typecheck, lint, 46 tests, 5 eval gates, production build pass</td></tr>
+          <tr><td><span class="pill next">1 · 1–2 weeks</span></td><td>Add Gemini and LangSmith keys; run <code>rag:ingest</code> for embeddings; run online evals; deploy to Vercel + Neon; add the domain to Firebase</td><td>Online eval gates pass; first LangSmith experiments recorded; public URL live</td></tr>
+          <tr><td><span class="pill next">2 · 3–6 weeks</span></td><td>Résumé upload (private RAG collection), coach agent, coding round with a runnable editor, spaced-repetition review queue, feedback thumbs feeding LangSmith</td><td>10–20 pilot students; retention and score improvement tracked</td></tr>
+          <tr><td><span class="pill later">3 · Quarter</span></td><td>College dashboards (placement cells), peer GD rooms, Hindi and Tamil interviews, PWA offline mode, pgvector</td><td>One college pilot; DPDP review; cost per session below target</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section id="risks">
+      <h2>Risks</h2>
+      <ul>
+        <li><strong>Model and key cost.</strong> Mitigated by offline mode, rate limits on AI routes and per-feature audit counts; set a monthly budget alert in Google AI Studio.</li>
+        <li><strong>Small eval sets.</strong> Today's gates prove the pipeline, not production quality. Phase 1 grows them from real, masked sessions.</li>
+        <li><strong>Heuristic PII detection</strong> misses names it has never seen in free text. Mitigation: the candidate's own name is always masked; add an NER pass if audits show leaks.</li>
+        <li><strong>Per-instance rate limiter.</strong> Move to Redis before running more than one server instance.</li>
+      </ul>
+    </section>
+
+    <section id="sources">
+      <h2>Sources</h2>
+      <ul class="sources">
+        <li><a href="https://favtutor.com/best-ai-mock-interview-tools-2026/" target="_blank" rel="noopener">13 Best AI Mock Interview Tools in 2026 — FavTutor</a></li>
+        <li><a href="https://www.cloudvyn.com/gd-simulator" target="_blank" rel="noopener">Cloudvyn GD Simulator</a></li>
+        <li><a href="https://ophyai.com/blog/career-advice/final-round-ai-pricing" target="_blank" rel="noopener">Final Round AI pricing 2026 — OphyAI (competitor-authored)</a></li>
+        <li><a href="https://aitoolsbakery.com/blog/yoodli-pricing-2026/" target="_blank" rel="noopener">Yoodli pricing 2026 — AI Tools Bakery</a></li>
+        <li><a href="https://claveprep.com/blog/claveprep-vs-huru" target="_blank" rel="noopener">Huru comparison — ClavePrep (competitor-authored)</a></li>
+        <li><a href="https://www.capterra.com/p/10039230/Big-Interview/" target="_blank" rel="noopener">Big Interview — Capterra</a></li>
+        <li><a href="https://interviewdrills.com/blog/best-ai-mock-interview-tools" target="_blank" rel="noopener">Best AI mock interview tools — Interview Drills</a></li>
+        <li><a href="https://cloud.google.com/text-to-speech/docs/gemini-tts" target="_blank" rel="noopener">Gemini-TTS style control — Google Cloud</a></li>
+      </ul>
+    </section>
+  </main>
+</div>

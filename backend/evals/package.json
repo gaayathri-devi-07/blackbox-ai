@@ -1,0 +1,5 @@
+{
+  "private": true,
+  "type": "module",
+  "description": "Offline eval scripts for Blackbox. Run from frontend/: npm run eval:rag"
+}

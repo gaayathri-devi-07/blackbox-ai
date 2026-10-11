@@ -1,0 +1,237 @@
+import { bank } from "../types";
+
+/**
+ * Behavioral — 38 questions (50 with the originals). Shown to every track.
+ * Sample answers model the structure; candidates should swap in their own stories.
+ */
+export const BEHAVIORAL_BANK = bank("BEHAVIORAL", [], [
+  {
+    slug: "failure-story", d: "M",
+    q: "Tell me about a time you failed.",
+    a: "In my final-year project I promised a working demo of a recommendation feature by the review date, but I underestimated data cleaning and the model wasn't ready. I told my guide a week early instead of hoping for a miracle, cut the scope to a simpler popularity-based version that worked, and presented the full model two weeks later. The lesson I took was to estimate the boring parts honestly and share risks early. Since then I break work into milestones with a buffer and flag slips the moment I see them.",
+    k: ["Pick a real failure with real stakes", "Own it without blaming others", "Show how you limited the damage", "Specific lesson and how you changed afterwards"],
+    w: "I'm a perfectionist so I don't really fail, but once I was late on a project.",
+  },
+  {
+    slug: "proudest-achievement", d: "E",
+    q: "What achievement are you most proud of?",
+    a: "I'm proudest of rebuilding our college placement portal's search. Students complained it took over five seconds and returned irrelevant jobs. I profiled it, found missing database indexes and a naive text match, added indexes and a proper full-text search with filters, and got response times under 300 milliseconds. I ran a short survey afterwards, and satisfaction went from about 2 to 4 out of 5. I'm proud because I took ownership of a problem nobody had assigned to me and measured the result.",
+    k: ["Choose something relevant to the role", "Explain the problem and why it mattered", "Your specific actions", "Measurable result and why you're proud"],
+  },
+  {
+    slug: "tight-deadline", d: "M",
+    q: "Tell me about a time you had to deliver under a tight deadline.",
+    a: "During my internship, a client demo was moved forward by a week, and our API integration wasn't finished. I listed everything remaining with my lead and split it into must-have for the demo and can-wait. I focused on the core flow, mocked one non-critical external service, and wrote a short list of known gaps for the team. We demoed on time, the client approved the next phase, and we finished the remaining items the following week. I learned that clear prioritisation beats working longer hours.",
+    k: ["Clarify what truly must be delivered", "Prioritise and cut scope transparently", "Communicate trade-offs and risks", "Outcome and lesson about prioritisation"],
+  },
+  {
+    slug: "learned-new-technology", d: "E",
+    q: "Tell me about a time you had to learn a new technology quickly.",
+    a: "My team needed a dashboard in React, which I'd never used, within two weeks. I spent the first two days on the official tutorial and building a tiny clone of one screen, then read our existing codebase to learn its patterns. I asked a senior teammate for a 30-minute review early, which caught a few bad habits before they spread. I delivered the dashboard on time, and later wrote a short onboarding guide for the next intern. My approach is: learn the basics fast, build something real, and get feedback early.",
+    k: ["Structured approach to learning", "Build something real quickly", "Seek feedback early", "Result plus how you shared what you learned"],
+  },
+  {
+    slug: "helped-teammate", d: "E",
+    q: "Describe a time you helped a teammate who was struggling.",
+    a: "A new teammate was stuck for days on our deployment process and was embarrassed to ask. I noticed his pull requests were stalling, offered to pair for an hour, and walked through the pipeline with him. We found the confusing steps weren't documented, so together we wrote a short step-by-step guide. He deployed independently the next day, and the guide cut onboarding time for later hires too. It taught me that struggling usually points to a gap in the system, not just the person.",
+    k: ["Notice the problem proactively", "Help in a respectful, practical way", "Fix the root cause, not just the instance", "Outcome for the person and the team"],
+  },
+  {
+    slug: "difficult-feedback-received", d: "M",
+    q: "Tell me about a time you received difficult feedback.",
+    a: "My internship manager told me my code worked but my pull requests were hard to review because they were huge and poorly explained. My first reaction was defensive, but I asked for examples and realised she was right: reviewers were taking days. I started splitting work into small, focused pull requests with a clear description and screenshots. Review time dropped from about three days to under one, and in my final review she highlighted my code reviews as a strength. Now I actively ask for feedback rather than waiting for it.",
+    k: ["Real, specific feedback", "Your honest initial reaction", "Concrete changes you made", "Measurable improvement and lasting habit"],
+  },
+  {
+    slug: "gave-difficult-feedback", d: "M",
+    q: "Tell me about a time you had to give someone difficult feedback.",
+    a: "In a group project, one member kept missing our internal deadlines, which blocked the rest of us. Instead of complaining to the others, I asked him for a quick private chat, described the specific impact, two missed hand-offs and the delay it caused, and asked what was going on. He was struggling with another course. We moved his tasks to ones with later deadlines and agreed on short check-ins. He delivered the rest on time. I learned to be specific, private and curious rather than accusatory.",
+    k: ["Private and timely", "Specific behaviour and impact", "Ask and listen before judging", "Agree on a plan and follow up"],
+  },
+  {
+    slug: "initiative-beyond-role", d: "M",
+    q: "Tell me about a time you took initiative beyond your assigned work.",
+    a: "While working on a feature, I noticed our test suite took 25 minutes, so everyone avoided running it. Nobody owned it, so I spent a few evenings profiling it and found that most of the time came from tests recreating the database for each case. I proposed sharing a test database with transactions rolled back after each test, got my lead's approval, and implemented it. The suite dropped to six minutes and people started running it before every push, which caught bugs earlier.",
+    k: ["Spot a problem nobody owned", "Get buy-in before big changes", "Execute and measure the result", "Broader impact on the team"],
+  },
+  {
+    slug: "handle-ambiguity-requirements", d: "M",
+    q: "How do you handle a task when the requirements keep changing?",
+    a: "I try to understand the goal behind the requests, because changing requirements often mean the real problem isn't clear yet. In one project, a stakeholder kept changing what a report should show. I set up a short meeting to ask what decision they wanted to make with it, then built a quick prototype with real data. That revealed what they actually needed, and the requirements stabilised. I also keep work modular and deliver in small increments, so changes are cheap, and I confirm any significant change in writing.",
+    k: ["Find the goal behind the requests", "Prototype early to reduce uncertainty", "Small increments and modular work", "Confirm changes in writing"],
+  },
+  {
+    slug: "mistake-in-production", d: "H",
+    q: "Tell me about a mistake you made that affected users. How did you handle it?",
+    a: "I once deployed a change to a form validation that accidentally rejected phone numbers with spaces, so some users couldn't sign up for about two hours. When the error rate alert fired, I immediately rolled back, confirmed sign-ups recovered, and told my lead what happened. Then I fixed the validation, added tests with real-world phone formats, and wrote a short post-mortem. The key changes were adding test cases from production data and a canary step for form changes. Owning it quickly made the conversation about fixing, not blaming.",
+    k: ["Take ownership immediately", "Stop the impact first, then fix", "Root cause and preventive measures", "Transparent communication"],
+  },
+  {
+    slug: "convince-team", d: "M",
+    q: "Tell me about a time you convinced your team to adopt your idea.",
+    a: "Our team manually tested every release, which took a full day. I proposed automated end-to-end tests, but people worried it would slow feature work. Instead of arguing, I automated our three most painful manual checks in a weekend and showed the time saved in the next release, plus a bug it caught. With that evidence, the team agreed to add tests gradually, two per sprint. Within two months, release testing went from a day to about two hours. Showing beats telling.",
+    k: ["Understand the objections", "Build a small proof", "Use evidence, not opinions", "Gradual adoption and measured outcome"],
+  },
+  {
+    slug: "work-with-difficult-stakeholder", d: "M",
+    q: "Describe a time you worked with a difficult stakeholder.",
+    a: "A department head repeatedly escalated requests directly to my manager, bypassing our process, which caused constant context switching. I set up a regular 20-minute weekly sync with him, shared a visible board of his team's requests and their status, and explained how we prioritised. Once he could see progress and had a predictable channel, the escalations stopped and the relationship improved. I learned that 'difficult' behaviour often comes from a lack of visibility or trust.",
+    k: ["Understand their underlying concern", "Create visibility and a predictable channel", "Stay professional and solution-focused", "Improved relationship as the result"],
+  },
+  {
+    slug: "balance-quality-speed", d: "M",
+    q: "Tell me about a time you had to choose between speed and quality.",
+    a: "Before a product launch we found the search feature returned slightly imperfect rankings. Fixing it properly would take two weeks and delay the launch. I discussed it with the product manager: the ranking issue was cosmetic, not harmful, while the launch date mattered for a partner. We launched on time, logged the issue with a clear owner and date, and fixed it in the next sprint. For anything affecting security or data correctness, I wouldn't make that trade. The skill is knowing which corners are safe to cut and documenting them.",
+    k: ["Assess the real risk of each option", "Involve the right stakeholders", "Never compromise security or data correctness", "Track the debt and pay it back"],
+  },
+  {
+    slug: "team-project-contribution", d: "E",
+    q: "Tell me about a team project and your specific contribution.",
+    a: "In a four-person hackathon team we built an app that matched surplus food from restaurants with shelters. I owned the backend: I designed the database, built the matching API and set up deployment. When the frontend fell behind, I also built the notification flow. I made sure to keep a shared task board so we always knew who was doing what. We won second place, and the judges highlighted that the demo worked end to end. I always separate what 'we' did from what 'I' did in these stories.",
+    k: ["Briefly describe the team and goal", "Make your own contribution explicit", "Show collaboration", "Clear outcome"],
+  },
+  {
+    slug: "motivation-question", d: "E",
+    q: "What motivates you at work?",
+    a: "I'm motivated by building things people actually use and seeing the impact. During my internship, the best moment wasn't finishing a feature, it was seeing usage data the week after and hearing that support tickets about that problem had dropped. I'm also motivated by learning; I enjoy problems where I don't know the answer yet. That's part of why this role appeals to me: the problems are real and at a scale where I'll keep learning.",
+    k: ["Be specific and genuine", "Back it with a real example", "Connect it to the role", "Avoid generic answers like 'money' or 'challenges'"],
+  },
+  {
+    slug: "why-leave-current-role", d: "M",
+    q: "Why are you looking to leave your current role?",
+    a: "I've learned a lot in my current role, especially about building reliable backend services, and I'm grateful for it. But the product is mature and most of my work is now maintenance. I'm looking for a place where I can work on newer problems, especially in AI-powered features, and grow toward owning larger systems. This role stood out because it combines both. I keep the answer positive and forward-looking rather than criticising my current employer.",
+    k: ["Stay positive about the current employer", "Focus on what you're moving towards", "Connect to this specific role", "Keep it brief and honest"],
+  },
+  {
+    slug: "handle-stress", d: "E",
+    q: "How do you handle stress and pressure?",
+    a: "I handle pressure by making it concrete. When I'm overwhelmed, I write down everything on my plate, sort it by impact and urgency, and talk to my lead about what can move. Breaking big tasks into small next steps helps me start. I also protect the basics, sleep and a short walk, because I make worse decisions when tired. For example, during exam season with an internship deadline, this approach let me deliver both without burning out.",
+    k: ["Concrete coping strategy", "Prioritise and communicate early", "Healthy habits", "Real example showing it works"],
+  },
+  {
+    slug: "time-management", d: "E",
+    q: "How do you manage your time across multiple tasks?",
+    a: "I keep one prioritised list and plan each morning around the one or two tasks that matter most. Deep work gets blocked time without notifications, and small tasks like emails are batched. When priorities conflict, I check with my lead instead of guessing. I also estimate tasks and compare with actual time afterwards, which has made my estimates much more accurate. In my last semester this let me balance coursework, an internship and placement preparation.",
+    k: ["Single prioritised list", "Protected time for deep work", "Clarify conflicting priorities", "Learn from estimates versus actuals"],
+  },
+  {
+    slug: "disagreement-with-teammate-technical", d: "M",
+    q: "Tell me about a technical disagreement with a peer and how it was resolved.",
+    a: "A teammate wanted to add a NoSQL database for a new feature, while I thought our existing Postgres could handle it. Instead of debating opinions, we wrote down the requirements and each listed pros and cons, then ran a quick benchmark with realistic data. Postgres handled the load comfortably, and avoiding a second database saved operational work, so we went with it. We agreed to revisit if traffic grew tenfold. The disagreement improved the decision because we both had to justify our views with data.",
+    k: ["Focus on requirements, not preferences", "Use data or a quick experiment", "Respectful process", "Agree on a revisit condition"],
+  },
+  {
+    slug: "customer-focus-story", d: "M",
+    q: "Tell me about a time you went out of your way for a user or customer.",
+    a: "While on support rotation, a user reported that exports from our app were missing rows, but nobody could reproduce it. I asked for their file, found it happened only with special characters in names, and fixed the encoding bug. I then searched logs for other affected users, found about forty, and we regenerated their exports and emailed them proactively. The original user wrote back to thank us, and the fix prevented future tickets. I try to treat each bug report as a sign of something bigger.",
+    k: ["Take the user's problem seriously", "Find the root cause", "Fix it for everyone affected", "Proactive communication and outcome"],
+  },
+  {
+    slug: "leadership-example", d: "M",
+    q: "Tell me about a time you showed leadership.",
+    a: "I led a five-person team for our college tech fest's registration system. I started by agreeing goals and roles based on each person's strengths, set up a weekly plan and short check-ins, and kept a shared board. When two members disagreed on the payment flow, I helped them compare options against our deadline. When one person fell sick, I re-balanced tasks. We launched on time and handled over 3,000 registrations without downtime. Leadership for me is making the team effective, not doing everything myself.",
+    k: ["Set direction and clear roles", "Remove blockers and resolve conflicts", "Adapt when things change", "Team outcome, not just yours"],
+  },
+  {
+    slug: "biggest-challenge", d: "M",
+    q: "What's the biggest technical challenge you've faced?",
+    a: "Our app's background jobs were sometimes processed twice, causing duplicate emails. It only happened under load, so it was hard to reproduce. I added detailed logging with job IDs and found that workers were timing out mid-job, so the queue re-delivered jobs still in progress. I fixed it by extending the visibility timeout based on real job durations and making the email step idempotent with a sent-records table. Duplicates dropped to zero. It taught me to design for at-least-once delivery from the start.",
+    k: ["Explain why it was hard", "Systematic debugging approach", "Root cause and fix", "Measurable result and lesson"],
+  },
+  {
+    slug: "prioritize-under-limited-time", d: "M",
+    q: "You have three urgent tasks and time for only one. What do you do?",
+    a: "First, I'd quickly check the impact of each: who is affected, how badly, and whether there's a deadline with real consequences. I'd check with my manager or stakeholders, because they may know context I don't, and see whether any task can be delegated, simplified or done partially. Then I'd do the highest-impact one and clearly tell the owners of the others when to expect them. In one sprint, this meant fixing a payment bug first and pushing a report by two days, which everyone accepted because I communicated early.",
+    k: ["Assess impact and real deadlines", "Consult stakeholders with context", "Delegate, simplify or partially deliver", "Communicate delays early"],
+  },
+  {
+    slug: "adapt-to-change", d: "E",
+    q: "Tell me about a time you had to adapt to a big change.",
+    a: "Halfway through my internship, my team switched from building a web app to focusing on a mobile app because of a strategy change. I had no mobile experience. I asked what was most needed and took on the API work the app depended on, while learning React Native in parallel through small tickets. Within a month I was contributing to the app directly. I learned to treat changes as a chance to grow rather than a setback, and to find where I can be useful immediately.",
+    k: ["Positive attitude to change", "Find where you can contribute now", "Learn in parallel", "Outcome and growth"],
+  },
+  {
+    slug: "creative-solution", d: "M",
+    q: "Tell me about a time you found a creative solution to a problem.",
+    a: "Our team needed labelled data to train a classifier for support tickets but had no budget for labelling. I noticed agents already tagged tickets when closing them, just inconsistently. I wrote a script to clean and map those historical tags to our categories, then had agents verify only the uncertain cases the model flagged. We got about 20,000 usable labels in two weeks at almost no cost, and the classifier reached 85 percent accuracy. The creativity was in reusing data that already existed.",
+    k: ["Clear constraint or obstacle", "Unconventional but practical idea", "Execution details", "Quantified result"],
+  },
+  {
+    slug: "worked-outside-comfort-zone", d: "E",
+    q: "Tell me about a time you stepped outside your comfort zone.",
+    a: "I'm naturally quiet, so presenting our team's project to the whole department was intimidating. I volunteered anyway because I knew I needed the skill. I prepared a simple story, practised with two friends who asked tough questions, and kept slides minimal. The presentation went well, and two teams later asked to reuse our tool. Since then I've presented at our team meetings regularly, and it's become much easier. Choosing discomfort deliberately has been one of my best learning habits.",
+    k: ["Genuine stretch for you", "Why you chose to do it", "How you prepared", "Result and lasting growth"],
+  },
+  {
+    slug: "handling-criticism-of-work", d: "M",
+    q: "How do you react when someone criticises your work in front of others?",
+    a: "I try to separate the message from the delivery. In a design review, a senior engineer bluntly said my caching approach would cause stale data. I thanked him, asked him to walk me through the scenario, and he was right about one case. I fixed it, and afterwards I privately mentioned that a heads-up before the meeting would have helped me prepare, which he appreciated. Staying calm and curious in the moment kept the focus on the work, and the design ended up better.",
+    k: ["Stay calm and curious", "Engage with the substance", "Address delivery privately if needed", "Better outcome for the work"],
+  },
+  {
+    slug: "made-decision-without-data", d: "H",
+    q: "Tell me about a time you had to make a decision without complete information.",
+    a: "We had to choose a vendor for SMS notifications within a week, without time for full testing. I listed what mattered most, deliverability in India, price, and API reliability, gathered what data I could from documentation, a quick trial and two peers at other companies, and picked the vendor that was strongest on deliverability. To reduce risk, I built the integration behind an interface so we could switch providers easily, and set up delivery-rate monitoring. Three months later we did add a backup vendor in a day because of that design.",
+    k: ["Identify the most important criteria", "Gather the best available data quickly", "Decide and reduce the downside risk", "Monitor and keep the decision reversible"],
+  },
+  {
+    slug: "mentoring-experience", d: "M",
+    q: "Tell me about a time you mentored or taught someone.",
+    a: "I mentored two juniors in our college coding club who were preparing for placements. I started by understanding their gaps through a mock interview each, then set a weekly plan with a few problems per topic and a short review session. Instead of giving answers, I asked guiding questions so they learned to approach problems themselves. Both improved steadily, and one got an offer from a product company. I learned that good teaching is mostly asking the right questions and giving honest feedback.",
+    k: ["Understand the learner's gaps", "Structured plan", "Guide rather than give answers", "Measurable progress"],
+  },
+  {
+    slug: "conflict-priorities-two-managers", d: "H",
+    q: "Two senior people give you conflicting priorities. What do you do?",
+    a: "I wouldn't pick a side silently. I'd make the conflict visible by writing down both requests, the effort and the trade-off, and ask them to align, ideally together, or ask my direct manager to help decide. Meanwhile, I'd work on anything that serves both. Once there's a decision, I confirm it in writing so everyone knows. In my internship this happened with two product managers, and a 15-minute joint conversation resolved it in a way neither had considered.",
+    k: ["Don't choose silently", "Make the trade-off explicit", "Get them aligned or escalate to your manager", "Confirm the decision in writing"],
+  },
+  {
+    slug: "improved-process", d: "M",
+    q: "Tell me about a time you improved a process.",
+    a: "New features in our team often broke because developers deployed without checking dependent services. I proposed a simple pre-deploy checklist and later automated it as a CI step that ran contract tests against dependent APIs. I piloted it on my own pull requests for two weeks, shared the issues it caught, and then the team adopted it. Deployment-related incidents dropped from about four a month to one. Starting small and proving value made adoption easy.",
+    k: ["Identify a recurring problem", "Propose a lightweight fix and pilot it", "Automate where possible", "Measure the improvement"],
+  },
+  {
+    slug: "salary-expectations", d: "E",
+    q: "What are your salary expectations?",
+    a: "I'd keep it research-based and flexible. For example: 'Based on my research for this role and level in Bengaluru, and my skills in backend and ML, I'm looking at a range of X to Y. I'm flexible depending on the full package, including learning opportunities and benefits.' I'd research using salary surveys, peers and published ranges beforehand, give a range whose bottom I'm genuinely happy with, and if it's very early in the process, I might ask about their range for the role first.",
+    k: ["Research market ranges beforehand", "Give a range with an acceptable floor", "Mention flexibility on the total package", "It's fine to ask their range first"],
+  },
+  {
+    slug: "questions-for-interviewer", d: "E",
+    q: "Do you have any questions for us?",
+    a: "Always say yes, and ask questions that show genuine interest and help you decide. For example: What does success look like in the first six months in this role? What's the biggest technical challenge the team is facing right now? How do code reviews and on-call work here? How do people typically grow from this role? I avoid asking about things easily found online, and I avoid leading with salary or leave in the first rounds.",
+    k: ["Always ask something", "Questions about success, challenges and growth", "Show you researched the company", "Avoid easily searchable or salary-first questions"],
+  },
+  {
+    slug: "describe-yourself-three-words", d: "E",
+    q: "How would you describe yourself in three words?",
+    a: "Curious, reliable and collaborative. Curious because I like understanding how things work, for example I rebuilt a small database engine to learn indexing. Reliable because when I commit to something, I deliver or flag risks early; my internship manager mentioned that in my review. And collaborative because I enjoy pairing and helping teammates, like writing onboarding guides. I'd pick words relevant to the role and back each with a quick example.",
+    k: ["Choose words relevant to the role", "Back each word with a quick example", "Keep it concise", "Avoid clichés without evidence"],
+  },
+  {
+    slug: "gap-in-resume", d: "M",
+    q: "Can you explain the gap in your resume?",
+    a: "Be honest and brief, then move forward. For example: 'I took eight months off to care for a family member. During that time I kept my skills current by completing a machine learning course and building two projects, which are on my GitHub. That situation is resolved, and I'm fully ready to commit to this role.' The interviewer mainly wants to know you're ready and that your skills are current, so focus on that rather than over-explaining.",
+    k: ["Be honest and brief", "Show how you stayed productive or learned", "Make clear you're ready now", "Don't over-explain"],
+  },
+  {
+    slug: "ethical-dilemma", d: "H",
+    q: "Tell me about a time you faced an ethical dilemma at work.",
+    a: "During an internship, I noticed an analytics script was collecting users' full phone numbers, which our privacy policy didn't mention and which we didn't need. Raising it felt awkward as an intern, but I documented what I found and brought it to my manager privately, suggesting we hash or remove the field. She escalated it, the field was removed, and existing data was deleted. I learned that raising concerns respectfully and with evidence is part of doing the job well, not a risk to it.",
+    k: ["Real situation with genuine tension", "Act on principles respectfully", "Use evidence and the right channel", "Outcome and what you learned"],
+  },
+  {
+    slug: "long-term-project-motivation", d: "M",
+    q: "How do you stay motivated on a long project with no quick wins?",
+    a: "I break it into milestones that each produce something visible, like a working prototype, first real user or a benchmark, so progress is tangible. I keep a short weekly log of what I achieved, which helps on slow weeks. I also stay connected to why the project matters by talking to the people who'll use it. On a six-month capstone, demoing a rough version to classmates every month kept me motivated and gave feedback that changed the design for the better.",
+    k: ["Milestones with visible results", "Track and reflect on progress", "Stay connected to the purpose and users", "Regular demos for feedback"],
+  },
+  {
+    slug: "handling-repetitive-work", d: "E",
+    q: "How do you handle repetitive or boring tasks?",
+    a: "First I make sure they're done well, because boring tasks often matter, like data cleaning or test maintenance. Then I look for ways to automate or simplify them. In my internship, I had to generate a weekly report manually, which took two hours. After doing it twice to understand it, I wrote a script that produced it in minutes, and shared it with the team. If something truly can't be automated, I batch it into one block so it doesn't fragment my day.",
+    k: ["Do it well; boring work often matters", "Understand it, then automate", "Share improvements with the team", "Batch what can't be automated"],
+  },
+]);

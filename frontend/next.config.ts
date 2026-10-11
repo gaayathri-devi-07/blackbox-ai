@@ -1,9 +1,44 @@
 import type { NextConfig } from "next";
 
+const isDev = process.env.NODE_ENV !== "production";
+
+function contentSecurityPolicy({ blobScripts = false } = {}) {
+  return [
+    "default-src 'self'",
+    // Firebase Auth popups/reCAPTCHA need Google script origins. MediaPipe and ONNX
+    // Runtime load their WASM runtimes from jsDelivr ('unsafe-eval' covers WebAssembly).
+    // The interview room additionally allows blob: scripts: multi-threaded ONNX Runtime
+    // starts its worker threads from same-origin blob URLs.
+    `script-src 'self' 'unsafe-inline' 'unsafe-eval'${blobScripts ? " blob:" : ""} https://apis.google.com https://www.gstatic.com https://www.google.com https://cdn.jsdelivr.net`,
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: blob: https://*.googleusercontent.com https://avatars.githubusercontent.com",
+    "font-src 'self' data:",
+    [
+      "connect-src 'self'",
+      "https://*.googleapis.com",
+      "https://identitytoolkit.googleapis.com",
+      "https://securetoken.googleapis.com",
+      "https://cdn.jsdelivr.net",
+      "https://storage.googleapis.com",
+      // On-device Whisper transcription downloads its model files from Hugging Face.
+      "https://huggingface.co",
+      "https://*.huggingface.co",
+      "https://*.hf.co",
+      isDev ? "ws://localhost:* http://localhost:*" : "",
+    ].filter(Boolean).join(" "),
+    "media-src 'self' blob:",
+    "frame-src 'self' https://*.firebaseapp.com https://accounts.google.com https://www.google.com",
+    "worker-src 'self' blob:",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    isDev ? "" : "upgrade-insecure-requests",
+  ].filter(Boolean).join("; ");
+}
+
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
-  { key: "X-Download-Options", value: "noopen" },
   { key: "X-DNS-Prefetch-Control", value: "off" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
@@ -13,84 +48,45 @@ const securityHeaders = [
   },
   { key: "Cross-Origin-Opener-Policy", value: "same-origin-allow-popups" },
   { key: "Cross-Origin-Resource-Policy", value: "same-origin" },
-  {
-    key: "Content-Security-Policy",
-    value: [
-      "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://apis.google.com https://www.gstatic.com",
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-      // Added blob: for Three.js texture loading and canvas operations
-      "img-src 'self' data: blob: https://*.googleapis.com https://*.firebasestorage.app https://*.googleusercontent.com",
-      "font-src 'self' https://fonts.gstatic.com",
-      "connect-src 'self' https://*.firebaseio.com https://*.googleapis.com https://generativelanguage.googleapis.com https://identitytoolkit.googleapis.com wss://*.firebaseio.com",
-      "media-src 'self' blob:",
-      "frame-src 'self' https://*.firebaseapp.com https://accounts.google.com",
-      // blob: is critical — Three.js/R3F creates workers from blob URLs for shader compilation
-      "worker-src 'self' blob:",
-      "object-src 'none'",
-      "base-uri 'self'",
-      "form-action 'self'",
-      "upgrade-insecure-requests",
-    ].join("; "),
-  },
+  { key: "Content-Security-Policy", value: contentSecurityPolicy() },
 ];
 
 const nextConfig: NextConfig = {
   headers: async () => [
+    { source: "/(.*)", headers: securityHeaders },
+    // The interview room runs Whisper in WebAssembly. Cross-origin isolation enables
+    // SharedArrayBuffer, so the model can use several CPU threads. "credentialless"
+    // keeps CDN and model downloads working without extra CORP headers.
     {
-      source: "/(.*)",
-      headers: securityHeaders,
+      source: "/interview/session",
+      headers: [
+        { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+        { key: "Cross-Origin-Embedder-Policy", value: "credentialless" },
+        { key: "Content-Security-Policy", value: contentSecurityPolicy({ blobScripts: true }) },
+      ],
     },
+    // Workers spawned by that page need a matching embedder policy.
+    { source: "/_next/static/:path*", headers: [{ key: "Cross-Origin-Embedder-Policy", value: "credentialless" }] },
   ],
-
   poweredByHeader: false,
+  images: { qualities: [75, 85] },
   reactStrictMode: true,
-
-  // ─── Turbopack configuration (Next.js 16+) ─────────────────────────────────
-  // Empty config silences webpack/turbopack migration warning
-  turbopack: {},
-
-  // ─── Three.js / R3F / GSAP optimizations ───────────────────────────────────
-  experimental: {
-    // Tree-shake these heavy packages at build time — cuts bundle size ~40%
-    optimizePackageImports: [
-      "three",
-      "@react-three/fiber",
-      "@react-three/drei",
-      "@react-three/postprocessing",
-      "gsap",
-    ],
-  },
-
-  webpack: (config, { isServer }) => {
-    // Three.js uses a lot of browser-only globals — exclude from server bundle
-    if (isServer) {
-      config.externals = [
-        ...(Array.isArray(config.externals) ? config.externals : []),
-        "three",
-        "@react-three/fiber",
-        "@react-three/drei",
-        "@react-three/postprocessing",
-      ];
-    }
-
-    // Allow importing raw GLSL shader files as strings
-    // Usage: import vertexShader from './shaders/vertex.glsl'
-    config.module.rules.push({
-      test: /\.(glsl|vs|fs|vert|frag)$/,
-      exclude: /node_modules/,
-      use: ["raw-loader", "glslify-loader"],
-      type: "javascript/auto",
-    });
-
-    // Silence the "Critical dependency: require function is used" warning
-    // that Three.js triggers in some webpack versions
-    config.module = {
-      ...config.module,
-      exprContextCritical: false,
-    };
-
-    return config;
+  // Self-contained server bundle for the Docker image (set in the Dockerfile; not
+  // needed on Vercel, and Windows can't copy some traced chunk names).
+  output: process.env.BUILD_STANDALONE === "1" ? "standalone" : undefined,
+  // pg ships optional native bindings; keep it out of the server bundle.
+  serverExternalPackages: ["pg", "langsmith", "@huggingface/transformers", "onnxruntime-node"],
+  async redirects() {
+    return [
+      // Routes consolidated during the redesign — keep old links working.
+      { source: "/landing", destination: "/login", permanent: true },
+      { source: "/auth", destination: "/onboarding", permanent: true },
+      { source: "/career", destination: "/onboarding", permanent: true },
+      { source: "/companion", destination: "/onboarding", permanent: true },
+      { source: "/journey", destination: "/home", permanent: false },
+      { source: "/journey/mock", destination: "/interview/setup", permanent: true },
+      { source: "/journey/mock/:path*", destination: "/interview/setup", permanent: true },
+    ];
   },
 };
 

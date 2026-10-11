@@ -1,0 +1,118 @@
+{
+  "version": 1,
+  "description": "Golden Q&A pairs for the Blackbox RAG pipeline. 'expectedSources' are knowledge_chunks.source_id values (a trailing '#' matches any section of a note). 'answerable: false' items must be declined.",
+  "items": [
+    {
+      "id": "rag-eval",
+      "question": "How should I evaluate a RAG pipeline?",
+      "referenceAnswer": "Evaluate retrieval separately from generation: build a golden set and measure recall@k and MRR, then measure answer faithfulness, answer relevance and citation accuracy, and re-run on every change to chunking, embeddings or prompts.",
+      "expectedSources": ["note:rag-systems#", "q:evaluate-llm-feature", "note:llm-evaluation#"],
+      "answerable": true
+    },
+    {
+      "id": "hybrid-retrieval",
+      "question": "Why combine keyword search with vector search in retrieval?",
+      "referenceAnswer": "Dense vectors capture meaning but miss exact identifiers, error codes and rare terms; keyword search catches those. Combining both and fusing rankings, for example with reciprocal rank fusion, improves recall.",
+      "expectedSources": ["note:rag-systems#2", "q:design-rag-system"],
+      "answerable": true
+    },
+    {
+      "id": "precision-recall",
+      "question": "When should I optimise for precision rather than recall?",
+      "referenceAnswer": "Optimise for precision when false positives are costly, such as spam filtering; optimise for recall when missing positives is costly, such as fraud or disease screening. Choose the decision threshold from the business cost of each error.",
+      "expectedSources": ["q:precision-recall-tradeoff", "note:classification-metrics#"],
+      "answerable": true
+    },
+    {
+      "id": "overfitting",
+      "question": "My model does well on training data but badly on validation data. What should I do?",
+      "referenceAnswer": "That is high variance (overfitting). Add data, regularise with L2, dropout or early stopping, or simplify the model, and check for leakage and use learning curves to confirm.",
+      "expectedSources": ["q:bias-variance-tradeoff", "note:ml-bias-variance#"],
+      "answerable": true
+    },
+    {
+      "id": "drift",
+      "question": "How do I detect data drift for a model in production?",
+      "referenceAnswer": "Monitor input feature distributions and prediction distributions against a reference window with statistical tests, track model quality when labels arrive, alert on sustained shifts and define a retraining trigger.",
+      "expectedSources": ["q:monitoring-model-drift", "q:drift-detection-methods", "q:concept-vs-data-drift", "note:mlops-monitoring#"],
+      "answerable": true
+    },
+    {
+      "id": "cap",
+      "question": "Explain the trade-off between consistency and availability in distributed systems.",
+      "referenceAnswer": "During a network partition a distributed store must choose between consistency and availability. Strong consistency suits balances and inventory; eventual consistency suits feeds and counters.",
+      "expectedSources": ["q:consistency-tradeoffs-cap", "note:caching-consistency#2"],
+      "answerable": true
+    },
+    {
+      "id": "idempotency",
+      "question": "How do I make a payment API safe to retry?",
+      "referenceAnswer": "Use idempotency keys so a retried request with the same key returns the original result instead of charging twice, store the key with the outcome, and make handlers idempotent.",
+      "expectedSources": ["q:idempotent-payment-api", "q:http-methods-idempotency", "note:api-design#"],
+      "answerable": true
+    },
+    {
+      "id": "star",
+      "question": "How should I structure an answer to a behavioral question?",
+      "referenceAnswer": "Use STAR: a short situation, your task, the actions you took with your reasoning in first person, and a measurable result plus what you learned. Spend most of the time on the action.",
+      "expectedSources": ["q:star-method", "note:star-method#"],
+      "answerable": true
+    },
+    {
+      "id": "gd-entry",
+      "question": "How do I get into a group discussion that is already busy?",
+      "referenceAnswer": "Wait for a natural pause, acknowledge the previous speaker by name, and add one new idea with an example or a number rather than repeating what was said.",
+      "expectedSources": ["q:group-discussion-entry", "note:gd-entering-and-structuring#"],
+      "answerable": true
+    },
+    {
+      "id": "gd-summary",
+      "question": "What makes a good summary at the end of a group discussion?",
+      "referenceAnswer": "A neutral, short summary of the main arguments on each side and where the group converged, without adding new points or declaring a winner.",
+      "expectedSources": ["q:summarizing-discussion", "note:gd-entering-and-structuring#3"],
+      "answerable": true
+    },
+    {
+      "id": "dont-know",
+      "question": "What should I say in an interview when I don't know the answer?",
+      "referenceAnswer": "Say so honestly, then reason from what you do know, ask a clarifying question, state assumptions and work toward a partial answer.",
+      "expectedSources": ["note:handling-unknown-questions#"],
+      "answerable": true
+    },
+    {
+      "id": "kv-cache",
+      "question": "What is the KV cache in transformer inference?",
+      "referenceAnswer": "During autoregressive decoding the keys and values of earlier tokens are cached so each new token only computes attention for itself, trading memory for much faster generation.",
+      "expectedSources": ["q:kv-cache-inference"],
+      "answerable": true
+    },
+    {
+      "id": "oos-geography",
+      "question": "What is the capital of Peru?",
+      "referenceAnswer": "",
+      "expectedSources": [],
+      "answerable": false
+    },
+    {
+      "id": "oos-sports",
+      "question": "Who won the IPL in 2025?",
+      "referenceAnswer": "",
+      "expectedSources": [],
+      "answerable": false
+    },
+    {
+      "id": "oos-cooking",
+      "question": "Give me a recipe for chicken biryani.",
+      "referenceAnswer": "",
+      "expectedSources": [],
+      "answerable": false
+    },
+    {
+      "id": "oos-finance",
+      "question": "What is the price of Bitcoin today?",
+      "referenceAnswer": "",
+      "expectedSources": [],
+      "answerable": false
+    }
+  ]
+}

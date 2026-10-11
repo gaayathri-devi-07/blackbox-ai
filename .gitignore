@@ -15,3 +15,18 @@ build/
 # OS files
 .DS_Store
 Thumbs.db
+# Prisma generated client (rebuilt by `prisma generate` / postinstall)
+frontend/lib/generated/
+
+# Test / tooling output
+frontend/coverage/
+*.tsbuildinfo
+
+# Embedded PostgreSQL data (npm run dev:local)
+frontend/.local-db/
+
+# Local model caches (transformers.js reranker tests)
+frontend/.cache/
+
+# Eval reports
+backend/evals/results/

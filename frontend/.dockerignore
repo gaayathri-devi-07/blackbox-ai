@@ -1,0 +1,10 @@
+node_modules
+.next
+.local-db
+coverage
+.env
+.env.local
+.env.*.local
+*.log
+.claude
+lib/generated

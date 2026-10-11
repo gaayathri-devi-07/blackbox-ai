@@ -1,0 +1,339 @@
+// Blackbox AI — PostgreSQL schema (Prisma ORM 7)
+//
+// The connection URL lives in prisma.config.ts (Prisma 7 no longer reads it from
+// this file). Run `npm run db:migrate` after editing models.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+/// The engineering track a candidate is preparing for. Drives dashboard
+/// metrics, recommended modules and which practice questions are served.
+enum TargetRole {
+  AI_ENGINEER
+  ML_ENGINEER
+  BACKEND_ARCHITECT
+  FULL_STACK_DEVELOPER
+  DATA_SCIENTIST
+}
+
+enum ExperienceLevel {
+  ENTRY
+  JUNIOR
+  MID
+  SENIOR
+  STAFF
+}
+
+/// Practice domains. Also used for a user's preferred topics.
+enum PracticeCategory {
+  LLM_ARCHITECTURES
+  MACHINE_LEARNING
+  MLOPS
+  SYSTEM_DESIGN
+  DATA_STRUCTURES
+  BACKEND_ENGINEERING
+  FRONTEND_ENGINEERING
+  DATA_ANALYTICS
+  BEHAVIORAL
+  COMMUNICATION
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum InterviewMode {
+  SUPPORTIVE
+  STANDARD
+  PRESSURE
+}
+
+enum SessionStatus {
+  IN_PROGRESS
+  COMPLETED
+  ABANDONED
+}
+
+enum PracticeStatus {
+  REVIEWED
+  CONFIDENT
+}
+
+enum ChatRole {
+  USER
+  ASSISTANT
+}
+
+/// Where the candidate is in their career; shapes onboarding copy and interviewer context.
+enum CareerStage {
+  STUDENT
+  RECENT_GRADUATE
+  WORKING_PROFESSIONAL
+  CAREER_SWITCHER
+  BETWEEN_JOBS
+}
+
+/// How soon the candidate expects real interviews.
+enum InterviewTimeline {
+  THIS_WEEK
+  WITHIN_MONTH
+  ONE_TO_THREE_MONTHS
+  EXPLORING
+}
+
+/// What happened to one AI call (audit log).
+enum AiOutcome {
+  OK
+  FALLBACK
+  ERROR
+  BLOCKED
+}
+
+/// Source type of a retrieval-augmented generation (RAG) chunk.
+enum KnowledgeKind {
+  QUESTION
+  NOTE
+  COMPANY
+  GD_TOPIC
+}
+
+// ─── Models ───────────────────────────────────────────────────────────────────
+
+model User {
+  id              String             @id @default(cuid())
+  /// Firebase Auth uid — the identity provider's subject claim.
+  firebaseUid     String             @unique @map("firebase_uid")
+  email           String?
+  name            String?
+  photoUrl        String?            @map("photo_url")
+  targetRole      TargetRole?        @map("target_role")
+  experienceLevel ExperienceLevel?   @map("experience_level")
+  preferredTopics PracticeCategory[] @map("preferred_topics")
+  careerStage       CareerStage?       @map("career_stage")
+  /// College or employer.
+  organization      String?
+  /// Degree and major, or current job title.
+  currentTitle      String?            @map("current_title")
+  graduationYear    Int?               @map("graduation_year")
+  targetCompanies   String[]           @default([]) @map("target_companies")
+  interviewTimeline InterviewTimeline? @map("interview_timeline")
+  /// What the candidate wants from their preparation, in their own words.
+  goal              String?
+  createdAt       DateTime           @default(now()) @map("created_at")
+  updatedAt       DateTime           @updatedAt @map("updated_at")
+
+  interviewSessions InterviewSession[]
+  gdPerformances    GDPerformance[]
+  practiceProgress  PracticeProgress[]
+  coachMessages     CoachMessage[]
+  aiEvents          AiEvent[]
+  studyPlans        StudyPlan[]
+
+  @@index([email])
+  @@map("users")
+}
+
+model InterviewSession {
+  id              String           @id @default(cuid())
+  userId          String           @map("user_id")
+  role            TargetRole
+  company         String
+  mode            InterviewMode    @default(STANDARD)
+  experienceLevel ExperienceLevel? @map("experience_level")
+  status          SessionStatus    @default(IN_PROGRESS)
+  /// Overall score, 0–100. Null until the session is evaluated.
+  score           Int?
+  /// Structured evaluation: sub-scores, strengths, improvements, verdict.
+  feedback        Json?
+  /// Ordered list of { role: "interviewer" | "candidate", content, at }.
+  transcript      Json             @default("[]")
+  /// Webcam + speech signals: eye contact, posture, smile, filler words.
+  metrics         Json?
+  answerScores    Int[]            @map("answer_scores")
+  durationSec     Int?             @map("duration_sec")
+  /// Job description the candidate pasted; questions are tailored to it.
+  jobDescription  String?          @map("job_description")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+  completedAt     DateTime?        @map("completed_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt(sort: Desc)])
+  @@map("interview_sessions")
+}
+
+model GDPerformance {
+  id                String   @id @default(cuid())
+  userId            String   @map("user_id")
+  topic             String
+  /// Ordered list of { speakerId, speakerName, text, at }.
+  transcript        Json     @default("[]")
+  /// Structured evaluation of the user's contributions.
+  evaluation        Json?
+  score             Int?
+  contributionCount Int      @default(0) @map("contribution_count")
+  durationSec       Int?     @map("duration_sec")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt(sort: Desc)])
+  @@map("gd_performances")
+}
+
+model PracticeQuestion {
+  id           String           @id @default(cuid())
+  /// Stable identifier used by the seed script for idempotent upserts.
+  slug         String           @unique
+  category     PracticeCategory
+  /// Tracks this question targets. An empty list means it applies to every track.
+  roleTargets  TargetRole[]     @map("role_targets")
+  difficulty   Difficulty
+  question     String
+  sampleAnswer String           @map("sample_answer")
+  weakAnswer   String?          @map("weak_answer")
+  explanation  String?
+  tip          String?
+  /// The 3–4 concepts a candidate must know to answer well — shown as "what to study".
+  keyPoints    String[]         @default([]) @map("key_points")
+  tags         String[]
+  createdAt    DateTime         @default(now()) @map("created_at")
+  updatedAt    DateTime         @updatedAt @map("updated_at")
+
+  progress PracticeProgress[]
+
+  @@index([category, difficulty])
+  @@index([roleTargets], type: Gin)
+  @@map("practice_questions")
+}
+
+model PracticeProgress {
+  id         String         @id @default(cuid())
+  userId     String         @map("user_id")
+  questionId String         @map("question_id")
+  status     PracticeStatus
+  createdAt  DateTime       @default(now()) @map("created_at")
+  updatedAt  DateTime       @updatedAt @map("updated_at")
+
+  user     User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question PracticeQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questionId])
+  @@index([userId, updatedAt(sort: Desc)])
+  @@map("practice_progress")
+}
+
+model CoachMessage {
+  id         String   @id @default(cuid())
+  userId     String   @map("user_id")
+  role       ChatRole
+  content    String
+  /// Practice question the conversation was about, if any.
+  questionId String?  @map("question_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt(sort: Desc)])
+  @@map("coach_messages")
+}
+
+// ─── AI governance ────────────────────────────────────────────────────────────
+
+/// One row per model call or agent step. Stores sizes, counts and outcomes —
+/// never prompt text or personal values — so usage can be audited safely.
+model AiEvent {
+  id             String    @id @default(cuid())
+  userId         String?   @map("user_id")
+  /// Product feature, e.g. "interview.turn", "coach.chat", "agent.planner".
+  feature        String
+  /// generate | json | tts | transcribe | embed | tool
+  operation      String
+  provider       String    @default("gemini")
+  model          String?
+  outcome        AiOutcome
+  latencyMs      Int       @map("latency_ms")
+  promptChars    Int       @default(0) @map("prompt_chars")
+  outputChars    Int       @default(0) @map("output_chars")
+  /// Token usage reported by the model (null for offline or non-LLM events).
+  inputTokens    Int?      @map("input_tokens")
+  outputTokens   Int?      @map("output_tokens")
+  /// Count of masked values per PII kind, e.g. {"EMAIL":1}.
+  piiMasked      Json?     @map("pii_masked")
+  /// Prompt-injection heuristics that fired on user-supplied text.
+  guardFlags     String[]  @default([]) @map("guard_flags")
+  requestId      String?   @map("request_id")
+  detail         String?
+  createdAt      DateTime  @default(now()) @map("created_at")
+
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([feature, createdAt(sort: Desc)])
+  @@index([createdAt])
+  @@map("ai_events")
+}
+
+// ─── Retrieval (RAG) ──────────────────────────────────────────────────────────
+
+/// A retrievable passage: a practice question with its model answer, a study
+/// note, a company profile or a discussion topic. Searched with Postgres full
+/// text search and, when embeddings exist, cosine similarity.
+model KnowledgeChunk {
+  id             String            @id @default(cuid())
+  /// Stable id of the source, e.g. "q:rag-chunking" or "note:star-method#2".
+  sourceId       String            @unique @map("source_id")
+  kind           KnowledgeKind
+  title          String
+  content        String
+  category       PracticeCategory?
+  roleTargets    TargetRole[]      @map("role_targets")
+  tags           String[]          @default([])
+  /// Link shown with citations, e.g. "/journey/practice?q=…".
+  href           String?
+  /// Unit-length embedding (768 dims) when an embedding model is configured.
+  embedding      Float[]           @default([])
+  embeddingModel String?           @map("embedding_model")
+  contentHash    String            @map("content_hash")
+  createdAt      DateTime          @default(now()) @map("created_at")
+  updatedAt      DateTime          @updatedAt @map("updated_at")
+  /// Generated tsvector column (see migration) used for keyword retrieval.
+  search         Unsupported("tsvector")?
+
+  @@index([kind])
+  @@map("knowledge_chunks")
+}
+
+// ─── Agents ───────────────────────────────────────────────────────────────────
+
+/// A weekly preparation plan written by the planner agent (or its rule-based
+/// fallback), with the agent's tool calls kept for transparency.
+model StudyPlan {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  headline  String
+  /// Ordered plan items: { day, title, detail, href, minutes, kind }.
+  items     Json
+  rationale String?
+  /// "agent" when the model planned it, "rules" for the offline planner.
+  source    String
+  /// Agent trace: [{ tool, args, summary, ms }].
+  steps     Json     @default("[]")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt(sort: Desc)])
+  @@map("study_plans")
+}

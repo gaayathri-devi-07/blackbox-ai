@@ -1,0 +1,639 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blackbox — Complete Project Guide</title>
+<style>
+  :root {
+    --ink: #1c2b23; --muted: #55625b; --line: #d9ded9; --soft: #f4f6f3;
+    --green: #2f5a43; --sage: #6f8a77; --blue: #2c4f86; --amber: #8a5a10; --red: #8b2f2f;
+    --eli5: #fff7e6; --eli5-line: #f0cf8a; --tech: #eef3fb; --tech-line: #b8c9e6; --tip: #eef6f0; --tip-line: #b9d4c1;
+  }
+  @page { size: A4; margin: 16mm 15mm 18mm; }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; font: 10.4pt/1.55 "Segoe UI", system-ui, -apple-system, Arial, sans-serif; color: var(--ink); background: #fff; }
+  .page { max-width: 180mm; margin: 0 auto; padding: 0 2mm; }
+  h1, h2, h3, h4 { line-height: 1.2; margin: 0; color: var(--ink); }
+  h1 { font: 600 30pt/1.1 Georgia, "Times New Roman", serif; letter-spacing: -0.5px; }
+  h2 { font-size: 17pt; margin: 0 0 3mm; padding-top: 2mm; border-bottom: 1.5px solid var(--green); padding-bottom: 1.5mm; break-after: avoid; }
+  h2 .num { color: var(--sage); font-weight: 500; margin-right: 2mm; }
+  h3 { font-size: 12.5pt; margin: 5mm 0 2mm; color: var(--green); break-after: avoid; }
+  h4 { font-size: 10.8pt; margin: 3.5mm 0 1.2mm; break-after: avoid; }
+  p { margin: 0 0 2.4mm; }
+  ul, ol { margin: 0 0 2.6mm; padding-left: 5.5mm; }
+  li { margin: 0 0 0.9mm; }
+  code, .mono { font-family: "Cascadia Code", Consolas, "Courier New", monospace; font-size: 9pt; background: var(--soft); padding: 0 1mm; border-radius: 1mm; }
+  pre { font: 8.6pt/1.45 "Cascadia Code", Consolas, monospace; background: #f6f7f5; border: 1px solid var(--line); border-radius: 2mm; padding: 2.5mm 3mm; white-space: pre-wrap; margin: 0 0 3mm; break-inside: avoid; }
+  strong { font-weight: 600; }
+  em.hl { font-style: italic; font-family: Georgia, serif; color: var(--green); }
+  section { margin-bottom: 6mm; }
+  .chapter { break-before: page; }
+  .box { border: 1px solid; border-radius: 2.5mm; padding: 2.6mm 3.4mm 1.2mm; margin: 0 0 3.2mm; break-inside: avoid; }
+  .box > .label { font-size: 8pt; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1mm; display: block; }
+  .eli5 { background: var(--eli5); border-color: var(--eli5-line); }
+  .eli5 > .label { color: var(--amber); }
+  .tech { background: var(--tech); border-color: var(--tech-line); }
+  .tech > .label { color: var(--blue); }
+  .tip { background: var(--tip); border-color: var(--tip-line); }
+  .tip > .label { color: var(--green); }
+  table { width: 100%; border-collapse: collapse; margin: 0 0 3.5mm; font-size: 9.2pt; }
+  th, td { border: 1px solid var(--line); padding: 1.6mm 2mm; text-align: left; vertical-align: top; }
+  th { background: var(--soft); font-weight: 600; }
+  tr { break-inside: avoid; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; }
+  figure { margin: 0 0 4mm; break-inside: avoid; text-align: center; }
+  figure svg { width: 100%; height: auto; }
+  figcaption { font-size: 8.6pt; color: var(--muted); margin-top: 1mm; }
+  .qa { border-left: 3px solid var(--green); padding: 1mm 0 0.5mm 3.5mm; margin: 0 0 3mm; break-inside: avoid; }
+  .qa .q { font-weight: 600; margin-bottom: 0.8mm; }
+  .qa .a { margin: 0; }
+  .toc { columns: 2; column-gap: 8mm; font-size: 10pt; padding-left: 5mm; }
+  .toc li { break-inside: avoid; }
+  .cover { height: 255mm; display: flex; flex-direction: column; justify-content: space-between; padding: 8mm 0 4mm; }
+  .cover .eyebrow { font: 600 9pt "Segoe UI", sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: var(--sage); }
+  .cover .sub { font-size: 13pt; color: var(--muted); max-width: 135mm; margin-top: 6mm; }
+  .cover .mark { width: 15mm; height: 15mm; border-radius: 3.5mm; background: var(--green); position: relative; }
+  .cover .mark::after { content: ""; position: absolute; inset: 4.2mm; border: 1.4mm solid #fff; border-radius: 1mm; }
+  .pill { display: inline-block; border: 1px solid var(--line); border-radius: 10mm; padding: 0.4mm 2.4mm; font-size: 8.4pt; margin: 0 1mm 1.2mm 0; background: #fff; }
+  .small { font-size: 9pt; color: var(--muted); }
+  .kpi { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.5mm; margin: 0 0 4mm; }
+  .kpi div { border: 1px solid var(--line); border-radius: 2mm; padding: 2mm 2.5mm; }
+  .kpi b { display: block; font-size: 15pt; color: var(--green); }
+  .kpi span { font-size: 8.4pt; color: var(--muted); }
+  @media screen { body { background: #e9ece8; } .page { background: #fff; padding: 14mm 16mm; margin: 8mm auto; box-shadow: 0 2px 18px rgba(0,0,0,.08); } .chapter { margin-top: 10mm; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ═══════════════════════════════ COVER ═══════════════════════════════ -->
+<div class="cover">
+  <div>
+    <div class="mark"></div>
+    <p class="eyebrow" style="margin-top:12mm">Project handbook · October 2026</p>
+    <h1 style="margin-top:3mm">Blackbox<br><em class="hl">The complete guide</em></h1>
+    <p class="sub">Everything about how Blackbox was built — the tech stack and why each piece was chosen, the database, the AI interviewer, the group-discussion floor control, speech, eye-contact tracking and security — explained twice: once simply, once in proper technical terms. Read it end to end and you can answer any question about this project.</p>
+  </div>
+  <div>
+    <div class="kpi">
+      <div><b>500</b><span>practice questions, 50 per domain</span></div>
+      <div><b>5</b><span>target tracks that reshape the app</span></div>
+      <div><b>4 + 1</b><span>AI panelists plus a moderator in GD</span></div>
+      <div><b>0</b><span>video frames ever leave the browser</span></div>
+    </div>
+    <p class="small"><strong>How to read this guide.</strong> Every topic has a yellow <strong>“Explain like I’m 5”</strong> box (the idea in plain words) and a blue <strong>“In tech terms”</strong> box (what you would say to an engineer). Green boxes are interview tips. Chapter 14 is a bank of likely questions with model answers.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ CONTENTS ═══════════════════════════════ -->
+<section class="chapter">
+  <h2>Contents</h2>
+  <ol class="toc">
+    <li>What Blackbox is (the 60-second pitch)</li>
+    <li>The big picture: architecture</li>
+    <li>The tech stack, piece by piece, and why</li>
+    <li>How one request travels through the system</li>
+    <li>The database: PostgreSQL + Prisma</li>
+    <li>Sign-in and security</li>
+    <li>The AI layer: Gemini, fallbacks and prompts</li>
+    <li>The mock interview and the adaptive interviewer</li>
+    <li>Speech: listening and talking</li>
+    <li>Eye contact and posture: real measurements</li>
+    <li>The group discussion room: floor control, the queue and AI speakers</li>
+    <li>Practice Hub, dashboard, project review and the coach</li>
+    <li>Testing, quality and running the project</li>
+    <li>Interview question bank about this project</li>
+    <li>Glossary</li>
+  </ol>
+</section>
+
+<!-- ═══════════════════════════════ 1 ═══════════════════════════════ -->
+<section>
+  <h2><span class="num">1</span>What Blackbox is</h2>
+  <div class="box eli5"><span class="label">Explain like I’m 5</span>
+    <p>Blackbox is a practice gym for job interviews. You can talk to a pretend interviewer, join a pretend group discussion with four computer students, and study 500 flashcard-style questions. After every practice, it tells you what you did well, what to study, and how you looked on camera — like a coach who never gets tired.</p>
+  </div>
+  <div class="box tech"><span class="label">In tech terms</span>
+    <p>Blackbox is a full-stack Next.js 16 web application for interview preparation, targeted at five tracks (AI Engineer, ML Engineer, Backend Architect, Full Stack Developer, Data Scientist). It provides LLM-driven mock interviews with adaptive follow-ups and per-answer scoring, a real-time group-discussion simulator with exclusive floor control, a curated 500-question practice bank stored in PostgreSQL, on-device computer vision for delivery metrics (MediaPipe), and browser/AI speech for voice interaction. Every feature degrades gracefully to deterministic offline logic when the AI provider is unavailable.</p>
+  </div>
+  <h3>The main features</h3>
+  <table>
+    <tr><th style="width:28%">Feature</th><th>What it does</th></tr>
+    <tr><td>Mock interview</td><td>A 5-question interview with a company-styled interviewer. It reacts to your answers, coaches you when you say “I don’t know”, asks follow-ups about your projects, and scores every answer with key points to study.</td></tr>
+    <tr><td>Group discussion (GD)</td><td>A moderator plus four AI candidates with different personalities. Strict turn-taking: whoever speaks first holds the floor; everyone else waits in a queue.</td></tr>
+    <tr><td>Practice Hub</td><td>500 questions across 10 domains (50 each) with model answers, weak answers, key points and an AI coach.</td></tr>
+    <tr><td>Project review</td><td>Upload a project write-up and get interview questions about your own project, then get your answers reviewed.</td></tr>
+    <tr><td>Dashboard &amp; performance</td><td>A readiness index, score trends, skills profile and recommendations, all reorganised around your chosen track.</td></tr>
+    <tr><td>Delivery analysis</td><td>Measures eye contact and posture from your webcam — on your device — and reports real percentages.</td></tr>
+  </table>
+  <div class="box tip"><span class="label">Interview tip</span>
+    <p>Open with the problem, not the tech: “Students prepare for interviews alone, with no feedback. Blackbox simulates the real thing — including group discussions, which nobody can practise alone — and gives measured feedback.” Then mention two technical highlights: the floor-control state machine and the on-device eye-contact measurement.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ 2 ═══════════════════════════════ -->
+<section class="chapter">
+  <h2><span class="num">2</span>The big picture: architecture</h2>
+  <div class="box eli5"><span class="label">Explain like I’m 5</span>
+    <p>Think of a restaurant. Your browser is the dining table where you sit. The Next.js server is the waiter who takes your order. PostgreSQL is the big notebook in the kitchen where everything is written down so nothing is forgotten. Gemini is a very smart chef in another building that the waiter phones for special dishes. Firebase is the security guard at the door who checks who you are. And the camera magic (MediaPipe) happens right at your table — your picture never goes to the kitchen.</p>
+  </div>
+  <figure>
+    <svg viewBox="0 0 720 360" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial" font-size="12">
+      <defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#55625b"/></marker></defs>
+      <rect x="10" y="20" width="250" height="320" rx="12" fill="#f4f6f3" stroke="#b9c4bb"/>
+      <text x="24" y="44" font-weight="700" fill="#2f5a43">Browser (your device)</text>
+      <rect x="28" y="60" width="214" height="56" rx="8" fill="#fff" stroke="#b9c4bb"/><text x="40" y="82" font-weight="600">React UI (Next.js client)</text><text x="40" y="100" fill="#55625b" font-size="11">pages, dashboard, GD room</text>
+      <rect x="28" y="126" width="214" height="56" rx="8" fill="#fff" stroke="#b9c4bb"/><text x="40" y="148" font-weight="600">MediaPipe (WASM)</text><text x="40" y="166" fill="#55625b" font-size="11">eye contact + posture, on device</text>
+      <rect x="28" y="192" width="214" height="56" rx="8" fill="#fff" stroke="#b9c4bb"/><text x="40" y="214" font-weight="600">Web Speech API</text><text x="40" y="232" fill="#55625b" font-size="11">dictation + browser voices</text>
+      <rect x="28" y="258" width="214" height="56" rx="8" fill="#fff" stroke="#b9c4bb"/><text x="40" y="280" font-weight="600">Firebase Auth SDK</text><text x="40" y="298" fill="#55625b" font-size="11">Google / GitHub / phone sign-in</text>
+      <rect x="300" y="60" width="200" height="254" rx="12" fill="#eef3fb" stroke="#b8c9e6"/>
+      <text x="314" y="84" font-weight="700" fill="#2c4f86">Next.js server</text>
+      <text x="314" y="108" font-size="11">proxy.ts: rate limits, HTTPS</text>
+      <text x="314" y="128" font-size="11">API routes: /api/interview,</text>
+      <text x="314" y="144" font-size="11">/api/gd, /api/practice, /api/chat,</text>
+      <text x="314" y="160" font-size="11">/api/project, /api/tts, ...</text>
+      <text x="314" y="184" font-size="11">authedRoute: verify token,</text>
+      <text x="314" y="200" font-size="11">validate (zod), errors, IDs</text>
+      <text x="314" y="224" font-size="11">lib/ai: interviewer, GD,</text>
+      <text x="314" y="240" font-size="11">offline fallbacks</text>
+      <text x="314" y="264" font-size="11">lib/db.ts → Prisma client</text>
+      <rect x="540" y="40" width="170" height="70" rx="10" fill="#fff7e6" stroke="#f0cf8a"/><text x="554" y="66" font-weight="700" fill="#8a5a10">Google Gemini API</text><text x="554" y="86" font-size="11">text, JSON, voices,</text><text x="554" y="100" font-size="11">transcription</text>
+      <rect x="540" y="140" width="170" height="70" rx="10" fill="#eef6f0" stroke="#b9d4c1"/><text x="554" y="166" font-weight="700" fill="#2f5a43">PostgreSQL</text><text x="554" y="186" font-size="11">users, sessions, GD,</text><text x="554" y="200" font-size="11">500 questions, progress</text>
+      <rect x="540" y="240" width="170" height="70" rx="10" fill="#f4f6f3" stroke="#b9c4bb"/><text x="554" y="266" font-weight="700">Google JWKS</text><text x="554" y="286" font-size="11">public keys to verify</text><text x="554" y="300" font-size="11">Firebase ID tokens</text>
+      <path d="M242 88 H298" stroke="#55625b" stroke-width="1.6" marker-end="url(#a)"/><text x="248" y="80" font-size="10" fill="#55625b">HTTPS + token</text>
+      <path d="M500 100 L538 80" stroke="#55625b" stroke-width="1.6" marker-end="url(#a)"/>
+      <path d="M500 180 H538" stroke="#55625b" stroke-width="1.6" marker-end="url(#a)"/>
+      <path d="M500 260 L538 272" stroke="#55625b" stroke-width="1.6" marker-end="url(#a)"/>
+    </svg>
+    <figcaption>Figure 1 — Components and where they run. Video analysis and dictation run in the browser; data and AI calls go through the server.</figcaption>
+  </figure>
+  <div class="box tech"><span class="label">In tech terms</span>
+    <ul>
+      <li><strong>Monolithic Next.js app</strong> serving both the React UI (App Router, Server and Client Components) and a JSON API (Route Handlers under <code>app/api/*</code>). One deployable unit keeps development simple; boundaries inside the code (<code>lib/db.ts</code>, <code>lib/ai/*</code>, <code>lib/gd/*</code>) keep it modular.</li>
+      <li><strong>Stateless API</strong>: every request carries a Firebase ID token; the server verifies it and loads the user from PostgreSQL. No server sessions, so it scales horizontally.</li>
+      <li><strong>Edge middleware</strong> (<code>proxy.ts</code>): HTTPS redirect, per-IP rate limiting with separate budgets for AI routes and speech synthesis, and blocking of common probe paths.</li>
+      <li><strong>AI is optional</strong>: every AI call has a timeout and a deterministic fallback, so the product works with no API key.</li>
+      <li><strong>Privacy by design</strong>: computer vision runs in WebAssembly on the device; only summary percentages are stored.</li>
+    </ul>
+  </div>
+  <h3>Folder map</h3>
+<pre>blackbox-ai/
+├─ frontend/                 ← the whole app (Next.js)
+│  ├─ app/                   ← pages and API routes (App Router)
+│  │  ├─ login/              ← landing + sign-in
+│  │  ├─ (app)/              ← signed-in pages with the sidebar shell
+│  │  ├─ (focus)/            ← full-screen rooms: interview session, GD room
+│  │  ├─ (legal)/            ← terms, privacy
+│  │  └─ api/                ← interview, gd, practice, chat, project, me, tts, transcribe, health
+│  ├─ components/            ← UI building blocks, motion, track switcher
+│  ├─ hooks/useInterviewAnalyzer.ts ← eye contact + posture (MediaPipe)
+│  ├─ lib/
+│  │  ├─ ai/                 ← gemini.ts, interview.ts, answer-signals.ts, gd.ts
+│  │  ├─ gd/                 ← floor-control.ts, conductor.ts, agents.ts, topic-packs.ts
+│  │  ├─ server/             ← auth.ts (token checks), api.ts (route wrapper)
+│  │  ├─ db.ts, prisma.ts    ← all database access
+│  │  ├─ speech.ts           ← dictation, voices, recording
+│  │  └─ validation.ts       ← zod schemas shared by client and server
+│  ├─ prisma/                ← schema.prisma, migrations, seed + 500 questions
+│  └─ scripts/dev-local.mjs  ← one-command local database + server
+├─ docs/                     ← this guide
+└─ legacy/                   ← old code kept for reference</pre>
+</section>
+
+<!-- ═══════════════════════════════ 3 ═══════════════════════════════ -->
+<section class="chapter">
+  <h2><span class="num">3</span>The tech stack, piece by piece, and why</h2>
+  <p>For each piece: what it is in simple words, what it does in Blackbox, and why it was picked over alternatives. Interviewers love the “why”.</p>
+  <table>
+    <tr><th style="width:17%">Technology</th><th style="width:27%">Simple meaning</th><th style="width:28%">Job in Blackbox</th><th>Why this choice</th></tr>
+    <tr><td><strong>Next.js 16</strong> (App Router, Turbopack)</td><td>A framework that builds websites with React and also runs a server.</td><td>All pages, routing, server rendering and the API routes.</td><td>One codebase for UI and API; server rendering for a fast landing page; file-based routing; route groups for different layouts. Alternatives (separate React + Express) mean two deployments and duplicated types.</td></tr>
+    <tr><td><strong>React 19</strong></td><td>A library for building screens out of reusable pieces.</td><td>Every screen and component.</td><td>Industry standard, huge ecosystem, Server Components reduce JavaScript sent to the browser.</td></tr>
+    <tr><td><strong>TypeScript</strong></td><td>JavaScript with labels on data, so mistakes are caught early.</td><td>All code, plus types generated from the database schema.</td><td>Catches bugs before running; safe refactors; the database, API and UI share types.</td></tr>
+    <tr><td><strong>Tailwind CSS v4</strong> + shadcn/Radix</td><td>Styling with small utility classes; ready-made accessible building blocks.</td><td>The design system: colour tokens, dark/light themes, dialogs, menus.</td><td>Fast, consistent styling; Radix gives keyboard and screen-reader support for menus and dialogs for free.</td></tr>
+    <tr><td><strong>PostgreSQL</strong></td><td>A very reliable database that stores data in tables.</td><td>Users, interview sessions, GD results, 500 questions, progress, coach chats.</td><td>Relational data with relationships and transactions; arrays and JSON columns; GIN indexes; free and runs everywhere. MongoDB was not needed because the data is relational.</td></tr>
+    <tr><td><strong>Prisma 7</strong></td><td>A translator between TypeScript code and the database.</td><td>Schema, migrations, type-safe queries, seeding.</td><td>Type-safe queries generated from one schema file; migrations are versioned SQL files; Prisma 7’s driver adapter (<code>@prisma/adapter-pg</code>) uses the standard <code>pg</code> driver.</td></tr>
+    <tr><td><strong>Firebase Authentication</strong></td><td>A ready-made, secure login service from Google.</td><td>Google, GitHub and phone sign-in.</td><td>Building password storage, OTP and OAuth safely is hard; Firebase is free at this scale. The server verifies tokens itself with <code>jose</code>, so it doesn’t need the Firebase Admin SDK.</td></tr>
+    <tr><td><strong>Google Gemini API</strong></td><td>A smart AI model we can ask questions over the internet.</td><td>Interview questions and reactions, grading, GD panelists, coach, project questions, natural voices, accurate transcription.</td><td>Strong quality with JSON mode, a generous free tier, plus text-to-speech and audio understanding in the same API. Called over plain REST with timeouts and model fallback.</td></tr>
+    <tr><td><strong>Web Speech API</strong></td><td>The browser’s built-in ears and mouth.</td><td>Live dictation of your answers; reading questions aloud.</td><td>Free, no server cost, works instantly in Chrome and Edge. Upgraded by Gemini voices and transcription when a key is set.</td></tr>
+    <tr><td><strong>MediaPipe Tasks Vision</strong></td><td>Google’s camera AI that finds your face and body in a video.</td><td>Eye contact, posture and smile measurement.</td><td>Runs in the browser via WebAssembly at ~7 frames/second analysed — fast, free and private (video never uploaded).</td></tr>
+    <tr><td><strong>zod</strong></td><td>A gatekeeper that checks data has the right shape.</td><td>Validates every API request and every AI JSON reply.</td><td>One schema gives both runtime checks and TypeScript types; rejects bad input with clear 422 errors.</td></tr>
+    <tr><td><strong>jose</strong></td><td>A small library to check digital signatures on tokens.</td><td>Verifies Firebase ID tokens against Google’s public keys.</td><td>Lightweight, standards-based (JWT/JWKS), works in any runtime.</td></tr>
+    <tr><td><strong>Recharts</strong></td><td>Ready-made charts for React.</td><td>Score-trend chart on the dashboard.</td><td>Declarative charts that follow the design tokens.</td></tr>
+    <tr><td><strong>Vitest</strong></td><td>A tool that runs automatic checks on code.</td><td>Tests for floor control, the discussion conductor and answer reading.</td><td>Fast, TypeScript-native, supports fake timers for timing-heavy logic.</td></tr>
+    <tr><td><strong>embedded-postgres</strong> / Docker</td><td>A way to run a database on your laptop without installing it.</td><td><code>npm run dev:local</code> starts a private PostgreSQL inside the project.</td><td>One command to run everything in VS Code; Docker Compose is provided as an alternative.</td></tr>
+  </table>
+  <div class="box tip"><span class="label">Interview tip</span>
+    <p>If asked “why not microservices?”: the team and traffic are small, so a modular monolith gives faster development and simpler operations; the code is already split into clear modules (<code>lib/ai</code>, <code>lib/gd</code>, <code>lib/db</code>) that could become services later if needed.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ 4 ═══════════════════════════════ -->
+<section class="chapter">
+  <h2><span class="num">4</span>How one request travels through the system</h2>
+  <div class="box eli5"><span class="label">Explain like I’m 5</span>
+    <p>When you press “Submit answer”, your browser writes a letter with your answer and your ID badge. A doorman checks you aren’t sending letters too fast. A guard checks the badge is real. A clerk checks the letter is filled in properly. Then the interviewer reads it, writes it in the notebook, thinks of a reply, and sends a letter back.</p>
+  </div>
+  <figure>
+    <svg viewBox="0 0 720 150" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial" font-size="11">
+      <defs><marker id="b" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#2f5a43"/></marker></defs>
+      <g fill="#fff" stroke="#b9c4bb">
+        <rect x="5" y="40" width="100" height="62" rx="8"/><rect x="128" y="40" width="100" height="62" rx="8"/><rect x="251" y="40" width="100" height="62" rx="8"/>
+        <rect x="374" y="40" width="100" height="62" rx="8"/><rect x="497" y="40" width="100" height="62" rx="8"/><rect x="620" y="40" width="95" height="62" rx="8"/>
+      </g>
+      <g font-weight="600"><text x="15" y="62">1. Browser</text><text x="138" y="62">2. proxy.ts</text><text x="261" y="62">3. auth</text><text x="384" y="62">4. validate</text><text x="507" y="62">5. logic + DB</text><text x="630" y="62">6. reply</text></g>
+      <g fill="#55625b"><text x="15" y="80">api() adds</text><text x="15" y="94">Bearer token</text>
+      <text x="138" y="80">rate limit,</text><text x="138" y="94">HTTPS</text>
+      <text x="261" y="80">jose verifies</text><text x="261" y="94">token → user</text>
+      <text x="384" y="80">zod schema,</text><text x="384" y="94">size limit</text>
+      <text x="507" y="80">lib/ai + Prisma</text><text x="507" y="94">transaction</text>
+      <text x="630" y="80">JSON or</text><text x="630" y="94">error envelope</text></g>
+      <g stroke="#2f5a43" stroke-width="1.6" marker-end="url(#b)"><path d="M105 71 H126"/><path d="M228 71 H249"/><path d="M351 71 H372"/><path d="M474 71 H495"/><path d="M597 71 H618"/></g>
+      <text x="5" y="130" fill="#55625b">Any failure stops the chain and returns a consistent error: { error: { code, message, requestId } } with the right HTTP status (401, 413, 422, 429, 500...).</text>
+    </svg>
+    <figcaption>Figure 2 — The request pipeline, implemented by <code>authedRoute()</code> in <code>lib/server/api.ts</code>.</figcaption>
+  </figure>
+  <div class="box tech"><span class="label">In tech terms</span>
+    <ol>
+      <li><strong>Client</strong>: <code>lib/api-client.ts</code> attaches <code>Authorization: Bearer &lt;Firebase ID token&gt;</code>, sets a timeout with <code>AbortSignal.timeout</code>, and retries once with a refreshed token on <code>TOKEN_EXPIRED</code>.</li>
+      <li><strong>Edge</strong>: <code>proxy.ts</code> applies a sliding-window rate limit per IP: 120 requests/min for general API traffic, 20/min for AI-generating POSTs, 60/min for speech synthesis.</li>
+      <li><strong>Authentication</strong>: <code>requireUser()</code> verifies the JWT signature, issuer, audience and expiry against Google’s JWKS using <code>jose</code>, then upserts the user row (first request provisions the account).</li>
+      <li><strong>Validation</strong>: <code>parseBody(req, schema, maxBytes)</code> enforces a body size limit (413) and the zod schema (422 with field details).</li>
+      <li><strong>Business logic</strong> in <code>lib/ai/*</code> and data access only through <code>lib/db.ts</code>.</li>
+      <li><strong>Errors</strong>: known <code>ApiError</code>s map to status codes; anything unexpected becomes a generic 500 and is logged with a request ID that is also returned to the client.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ 5 ═══════════════════════════════ -->
+<section class="chapter">
+  <h2><span class="num">5</span>The database: PostgreSQL + Prisma</h2>
+  <div class="box eli5"><span class="label">Explain like I’m 5</span>
+    <p>A database is a set of super-organised notebooks. One notebook lists every user. Another lists every interview, and each interview page says which user it belongs to. When you delete your account, every page with your name is torn out too, so nothing is left behind.</p>
+  </div>
+  <figure>
+    <svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial" font-size="10.5">
+      <g fill="#fff" stroke="#2f5a43">
+        <rect x="270" y="10" width="180" height="120" rx="8"/>
+        <rect x="10" y="160" width="160" height="128" rx="8"/><rect x="190" y="160" width="160" height="110" rx="8"/>
+        <rect x="370" y="160" width="160" height="100" rx="8"/><rect x="550" y="160" width="160" height="96" rx="8"/>
+        <rect x="550" y="10" width="160" height="130" rx="8"/>
+      </g>
+      <g font-weight="700" fill="#2f5a43"><text x="280" y="28">users</text><text x="20" y="178">interview_sessions</text><text x="200" y="178">gd_performances</text><text x="380" y="178">practice_progress</text><text x="560" y="178">coach_messages</text><text x="560" y="28">practice_questions</text></g>
+      <g fill="#1c2b23">
+        <text x="280" y="46">id (cuid, PK)</text><text x="280" y="60">firebase_uid (unique)</text><text x="280" y="74">email, name</text><text x="280" y="88">target_role (enum)</text><text x="280" y="102">experience_level (enum)</text><text x="280" y="116">preferred_topics (enum[])</text>
+        <text x="20" y="196">user_id → users (cascade)</text><text x="20" y="210">role, company, mode, status</text><text x="20" y="224">transcript (JSON turns)</text><text x="20" y="238">feedback (JSON report)</text><text x="20" y="252">metrics (eye, posture…)</text><text x="20" y="266">score, answer_scores[]</text><text x="20" y="280">updated_at (concurrency)</text>
+        <text x="200" y="196">user_id → users (cascade)</text><text x="200" y="210">topic, transcript (JSON)</text><text x="200" y="224">evaluation (JSON)</text><text x="200" y="238">score, contribution_count</text><text x="200" y="252">duration_sec</text>
+        <text x="380" y="196">user_id → users (cascade)</text><text x="380" y="210">question_id → questions</text><text x="380" y="224">status: REVIEWED|CONFIDENT</text><text x="380" y="238">unique(user, question)</text>
+        <text x="560" y="196">user_id → users (cascade)</text><text x="560" y="210">question_id (optional)</text><text x="560" y="224">role: user|assistant</text><text x="560" y="238">content</text>
+        <text x="560" y="46">slug (unique, for seeding)</text><text x="560" y="60">category, difficulty</text><text x="560" y="74">role_targets (enum[], GIN)</text><text x="560" y="88">question, sample_answer</text><text x="560" y="102">weak_answer, explanation</text><text x="560" y="116">tip, key_points[], tags[]</text>
+      </g>
+      <g stroke="#55625b" stroke-width="1.3" fill="none"><path d="M300 130 L90 160"/><path d="M340 130 L270 160"/><path d="M400 130 L450 160"/><path d="M440 130 L620 160"/><path d="M630 140 L470 160"/></g>
+    </svg>
+    <figcaption>Figure 3 — Tables and relationships (simplified). Every per-user table deletes with its user (<code>onDelete: Cascade</code>).</figcaption>
+  </figure>
+  <div class="box tech"><span class="label">In tech terms</span>
+    <ul>
+      <li><strong>Schema-first</strong>: <code>prisma/schema.prisma</code> defines models and enums (<code>TargetRole</code>, <code>ExperienceLevel</code>, <code>PracticeCategory</code>, <code>Difficulty</code>, <code>InterviewMode</code>, <code>SessionStatus</code>, <code>PracticeStatus</code>, <code>ChatRole</code>). <code>@@map</code> gives snake_case table and column names.</li>
+      <li><strong>Migrations</strong>: versioned SQL in <code>prisma/migrations</code> (<code>init</code>, then <code>practice_key_points</code> which added a <code>TEXT[]</code> column). Applied with <code>prisma migrate deploy</code>.</li>
+      <li><strong>Postgres features used</strong>: enum types, array columns (<code>role_targets</code>, <code>tags</code>, <code>key_points</code>), a <strong>GIN index</strong> on <code>role_targets</code> so “questions for my track” (<code>has</code> / <code>isEmpty</code>) is fast, JSONB for transcripts and reports, a unique constraint on <code>(user_id, question_id)</code> for progress upserts.</li>
+      <li><strong>Optimistic concurrency</strong>: interview turns are appended with <code>updateMany where { id, updatedAt: expected }</code>. If two submits race, only one write matches the old timestamp; the other gets a 409 instead of corrupting the transcript.</li>
+      <li><strong>Seeding</strong>: <code>prisma/seed.ts</code> upserts the 500 questions by <code>slug</code> in batches of 25, so it is idempotent (safe to run on every deploy).</li>
+      <li><strong>Connection</strong>: one Prisma client singleton with the <code>PrismaPg</code> adapter (connection pooling via <code>pg</code>).</li>
+    </ul>
+  </div>
+  <h3>Why JSON columns for transcripts?</h3>
+  <p>A transcript is always read and written as a whole and its shape evolves (turn kinds, key points, refined flags were added later). Storing it as JSONB avoids a join per turn and avoids migrations for every new field, while the fields we filter and aggregate on (score, status, role, dates) stay as proper typed columns.</p>
+</section>
+
+<!-- ═══════════════════════════════ 6 ═══════════════════════════════ -->
+<section class="chapter">
+  <h2><span class="num">6</span>Sign-in and security</h2>
+  <div class="box eli5"><span class="label">Explain like I’m 5</span>
+    <p>Google gives you a special sticker after you log in. Every time you ask Blackbox for something, you show the sticker. Blackbox checks the sticker with Google’s official stamp pad to make sure it isn’t fake or old. It also only lets you open your own notebook pages, never someone else’s.</p>
+  </div>
+  <div class="box tech"><span class="label">In tech terms</span>
+    <ul>
+      <li><strong>Firebase Auth</strong> on the client (Google, GitHub OAuth; phone OTP with reCAPTCHA). The client obtains a short-lived <strong>ID token</strong> (a signed JWT, ~1 hour).</li>
+      <li><strong>Server verification</strong> with <code>jose.jwtVerify</code> against <code>securetoken@system.gserviceaccount.com</code> JWKS: checks RS256 signature, <code>iss</code>, <code>aud</code> (project ID) and expiry. Keys are cached.</li>
+      <li><strong>Authorization</strong>: every query is scoped by the user ID, e.g. <code>getOwnedInterview(userId, id)</code> — you can’t read another user’s session even with its ID (prevents IDOR).</li>
+      <li><strong>Demo mode</strong> for local development: a <code>dev:&lt;id&gt;</code> token accepted only when <code>DEV_AUTH_BYPASS=true</code> <em>and</em> not in production.</li>
+      <li><strong>Hardening</strong>: security headers (CSP, HSTS, X-Frame-Options, Referrer-Policy, Permissions-Policy, COOP/CORP), rate limits, body size limits, strict zod validation, generic 500 messages, no secrets in code (env vars), the Gemini key sent in a header (not the URL) so it never appears in logs.</li>
+      <li><strong>Privacy</strong>: account deletion (<code>DELETE /api/me</code>) removes the user and, via cascades, all their data. Video is processed on-device; recorded answer audio (only with Gemini on) is transcribed in memory and never stored.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ 7 ═══════════════════════════════ -->
+<section class="chapter">
+  <h2><span class="num">7</span>The AI layer: Gemini, fallbacks and prompts</h2>
+  <div class="box eli5"><span class="label">Explain like I’m 5</span>
+    <p>Blackbox has a very clever helper (Gemini) it can phone. But phones sometimes don’t connect. So Blackbox also keeps a big book of good questions and rules for scoring, and if the phone call fails, it uses the book. You still get a full interview — just a bit less magical.</p>
+  </div>
+  <div class="box tech"><span class="label">In tech terms</span>
+    <ul>
+      <li><strong>REST client</strong> (<code>lib/ai/gemini.ts</code>): <code>generateText</code> and <code>generateJson</code> call <code>generativelanguage.googleapis.com/v1beta/models/{model}:generateContent</code> with the key in the <code>x-goog-api-key</code> header.</li>
+      <li><strong>Resilience</strong>: hard timeout per call; one retry on 429/5xx; on 404 (retired model) it falls through a <code>GEMINI_MODELS</code> list and remembers the model that worked; “thinking” is kept low for latency.</li>
+      <li><strong>Structured output</strong>: JSON mode plus a <strong>zod schema</strong> validates every AI reply; malformed JSON is treated as “AI unavailable”, so the fallback runs.</li>
+      <li><strong>Graceful degradation</strong>: every feature catches <code>AIUnavailableError</code> and uses deterministic logic: practice-bank questions, a heuristic rubric, topic packs for GD, generic project questions.</li>
+      <li><strong>Extra capabilities</strong>: <code>synthesizeSpeech()</code> (Gemini TTS models, prebuilt voices like Charon, Kore, Puck; PCM wrapped into WAV) and <code>transcribeAudio()</code> (16 kHz WAV sent inline for accurate transcripts).</li>
+      <li><strong>Prompt design</strong>: system prompt sets persona, company style, track focus, level and mode; rules demand plain spoken English (no markdown), one question per turn, and JSON with a fixed schema. Server-side guards still enforce rules the model might ignore (e.g. follow-up limits, on-topic check in GD).</li>
+    </ul>
+  </div>
+  <div class="box tip"><span class="label">Interview tip</span>
+    <p>“What if the LLM is down or returns garbage?” — Every call has a timeout, the JSON is schema-validated, and each feature has an offline path that produces a complete, coherent session. The health endpoint reports <code>ai: "configured" | "fallback"</code> and the UI labels heuristic scores honestly.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ 8 ═══════════════════════════════ -->
+<section class="chapter">
+  <h2><span class="num">8</span>The mock interview and the adaptive interviewer</h2>
+  <div class="box eli5"><span class="label">Explain like I’m 5</span>
+    <p>The interviewer doesn’t just read a list. It listens. If you say “I don’t know”, it gives you a few hints and lets you try again, like a kind teacher. If you talk about something you built, it gets curious and asks about it. If your answer is short, it nudges you to say more. At the end, it tells you exactly which ideas to study for next time.</p>
+  </div>
+  <h3>The flow of one interview</h3>
+  <ol>
+    <li><strong>Setup</strong>: choose company style (Google, Amazon, Microsoft, Meta, AI lab, startup, consulting), mode (Coached, Standard, Bar raiser), experience level and voice.</li>
+    <li><strong>Preflight</strong>: camera check, accent selection for dictation, AI voice availability.</li>
+    <li><strong>Opening</strong>: the interviewer greets you and asks you to introduce yourself.</li>
+    <li><strong>Loop</strong>: the interviewer speaks → you answer (voice or typing) → the server reads your answer and decides the next move → repeat. 5 main questions, plus up to 2 follow-ups and coaching retries.</li>
+    <li><strong>Finish</strong>: the evaluation report with scores, strengths, improvements, a practice plan and an answer-by-answer review with <em>key points to study</em>.</li>
+  </ol>
+  <h3>How the interviewer decides what to say next</h3>
+  <figure>
+    <svg viewBox="0 0 720 210" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial" font-size="11">
+      <defs><marker id="c" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#2f5a43"/></marker></defs>
+      <rect x="10" y="80" width="130" height="50" rx="8" fill="#fff" stroke="#b9c4bb"/><text x="22" y="101" font-weight="600">Your answer</text><text x="22" y="117" fill="#55625b">readAnswer()</text>
+      <rect x="190" y="10" width="250" height="52" rx="8" fill="#fff7e6" stroke="#f0cf8a"/><text x="202" y="31" font-weight="600">“I don’t know” / “give me a hint”</text><text x="202" y="48" fill="#55625b">→ COACHING: 2–3 hints, try again (once)</text>
+      <rect x="190" y="80" width="250" height="52" rx="8" fill="#eef3fb" stroke="#b8c9e6"/><text x="202" y="101" font-weight="600">Talks about a project + tech (RAG, Kafka…)</text><text x="202" y="118" fill="#55625b">→ FOLLOW-UP on that concept (max 2)</text>
+      <rect x="190" y="150" width="250" height="52" rx="8" fill="#eef6f0" stroke="#b9d4c1"/><text x="202" y="171" font-weight="600">Normal answer</text><text x="202" y="188" fill="#55625b">→ react specifically, next MAIN question</text>
+      <rect x="490" y="80" width="220" height="52" rx="8" fill="#fff" stroke="#b9c4bb"/><text x="502" y="101" font-weight="600">Turn saved with kind, prompt,</text><text x="502" y="118" fill="#55625b">key points and bank reference</text>
+      <g stroke="#2f5a43" stroke-width="1.5" fill="none" marker-end="url(#c)"><path d="M140 100 L188 40"/><path d="M140 105 H188"/><path d="M140 112 L188 172"/><path d="M440 36 L488 98"/><path d="M440 106 H488"/><path d="M440 176 L488 116"/></g>
+    </svg>
+    <figcaption>Figure 4 — The decision made after every answer (<code>lib/ai/interview.ts → nextTurn</code>).</figcaption>
+  </figure>
+  <div class="box tech"><span class="label">In tech terms</span>
+    <ul>
+      <li><strong>Answer signals</strong> (<code>lib/ai/answer-signals.ts</code>): regular expressions detect “don’t know”, help requests, project stories and nervousness; a dictionary of ~28 technologies (RAG, vector DBs, LoRA, Kafka, Redis, Kubernetes, React, SQL…) maps each to a realistic follow-up question and study points. Unit-tested.</li>
+      <li><strong>Allowed moves</strong> are computed on the server: coaching only once per question; follow-ups only after a project story, max 2, never twice in a row; main questions until 5. The model chooses within those moves (JSON: <code>kind, reaction, question, keyPoints</code>), and the server overrides anything not allowed.</li>
+      <li><strong>Personalisation</strong>: experience level maps to difficulty (Entry/Junior → Easy/Medium, Mid → Medium/Hard, Senior/Staff → Hard); the profile’s preferred topics are asked first; tone follows the mode and the candidate’s energy.</li>
+      <li><strong>Turn model</strong>: each interviewer turn stores <code>content</code> (what was said), <code>prompt</code> (the bare question), <code>kind</code> (question / followup / coaching), <code>keyPoints</code> and <code>ref</code> (practice-bank ID).</li>
+      <li><strong>Idempotency</strong>: the client sends the interviewer-turn number with every answer. A duplicate or late submit for an old turn gets 409 <code>NOT_YOUR_TURN</code>, and optimistic concurrency stops two answers being written at once.</li>
+      <li><strong>Scoring without AI</strong> (heuristic rubric): <code>30 + length×30 + structure×15 + impact×15 + ownership×10 − filler penalty</code>, clamped 15–92. Length is best at 90–260 words; structure counts signposts (“first”, “because”, “trade-off”); impact counts numbers and outcome verbs; ownership counts “I built / I decided”. “Don’t know” answers are capped at 12 and marked <em>Not attempted</em>.</li>
+      <li><strong>Overall score</strong> = technical depth 30% + problem solving 25% + communication 20% + structure 15% + composure 10%.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ 9 ═══════════════════════════════ -->
+<section class="chapter">
+  <h2><span class="num">9</span>Speech: listening and talking</h2>
+  <div class="box eli5"><span class="label">Explain like I’m 5</span>
+    <p>Your browser has ears and a mouth. The ears write down what you say while you speak. We tell the ears your accent (like “English, India”) so they understand you better. The mouth reads questions aloud; we pick the nicest-sounding voice and make it pause between sentences like a real person. If Blackbox has its Gemini key, an even better mouth and a second, more careful pair of ears are used.</p>
+  </div>
+  <h3>Listening (speech-to-text)</h3>
+  <div class="box tech"><span class="label">In tech terms</span>
+    <ul>
+      <li><strong>Web Speech API</strong> <code>SpeechRecognition</code> with <code>continuous = true</code> and <code>interimResults = true</code>: interim words stream into the answer box as you speak; final words replace them.</li>
+      <li><strong>Accent</strong>: <code>rec.lang</code> is the candidate’s accent (en-IN, en-US, en-GB…), defaulting to the browser locale — a major accuracy improvement for Indian English.</li>
+      <li><strong>Restarts</strong>: browsers end a session after silence or ~60 s; the recognizer commits what it heard and restarts immediately in <code>onend</code>, so long answers aren’t cut off.</li>
+      <li><strong>Accurate transcript (with Gemini)</strong>: while you answer, <code>AnswerRecorder</code> captures microphone audio with the Web Audio API, downsamples to 16 kHz mono WAV in the browser, and on submit sends it to <code>/api/transcribe</code>. Gemini transcribes it, given your accent and the question for spelling technical terms. The refined text replaces the live text and is flagged <code>refined</code>.</li>
+      <li><strong>Browser note</strong>: Chrome streams words live; Edge returns words only after pauses — the UI tells Edge users.</li>
+    </ul>
+  </div>
+  <h3>Talking (text-to-speech)</h3>
+  <div class="box tech"><span class="label">In tech terms</span>
+    <ul>
+      <li><strong>Voice ranking</strong> <code>voiceQuality()</code>: neural voices (names containing “Natural/Online/Neural/Premium”) score highest, then Google voices; legacy Windows SAPI voices (David, Zira) score lowest; the user’s accent region gets a bonus.</li>
+      <li><strong>Natural delivery</strong>: text is split into sentences (very long ones at a comma), each spoken as its own utterance with a slightly varied rate (±3%) and a pause of ~260–500 ms between sentences (longer after questions). This removes the “machine reading a book” effect and avoids Chrome cutting off long utterances.</li>
+      <li><strong>Distinct speakers</strong>: in the GD room each panelist gets a different voice (picked without repeats) plus its own pitch/pace.</li>
+      <li><strong>Gemini voices</strong> (when configured): <code>/api/tts</code> returns natural speech from Gemini’s TTS models with a delivery style, e.g. “warmly and conversationally”. Falls back to the browser voice on any error.</li>
+      <li><strong>Captions</strong>: the sentence being spoken is shown on screen with a blur-in animation.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ 10 ═══════════════════════════════ -->
+<section class="chapter">
+  <h2><span class="num">10</span>Eye contact and posture: real measurements</h2>
+  <div class="box eli5"><span class="label">Explain like I’m 5</span>
+    <p>A tiny camera brain on your computer finds 478 dots on your face and dots on your shoulders, about 7 times every second. It checks: is your head facing the screen, and are your eyes looking at it? Are your shoulders level and is your head not sinking down? It adds up the seconds you did it right. If you looked at the screen for 3 minutes out of 4, your eye contact is 75%. Nothing is guessed, and your video never leaves your computer.</p>
+  </div>
+  <figure>
+    <svg viewBox="0 0 720 140" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial" font-size="11">
+      <defs><marker id="d" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#2f5a43"/></marker></defs>
+      <g fill="#fff" stroke="#b9c4bb"><rect x="5" y="30" width="120" height="70" rx="8"/><rect x="150" y="30" width="150" height="70" rx="8"/><rect x="325" y="30" width="175" height="70" rx="8"/><rect x="525" y="30" width="190" height="70" rx="8"/></g>
+      <g font-weight="600"><text x="15" y="52">Webcam frame</text><text x="160" y="52">MediaPipe (WASM)</text><text x="335" y="52">Per-frame decision</text><text x="535" y="52">Time accumulation</text></g>
+      <g fill="#55625b"><text x="15" y="70">every ~140 ms</text><text x="15" y="86">stays on device</text>
+      <text x="160" y="70">Face Landmarker: 478 pts,</text><text x="160" y="86">blendshapes, head matrix</text>
+      <text x="335" y="70">eye contact? upright?</text><text x="335" y="86">vs. your calibrated baseline</text>
+      <text x="535" y="70">eye% = eyeSec / cameraSec</text><text x="535" y="86">posture% = uprightSec / poseSec</text></g>
+      <g stroke="#2f5a43" stroke-width="1.5" marker-end="url(#d)"><path d="M125 65 H148"/><path d="M300 65 H323"/><path d="M500 65 H523"/></g>
+    </svg>
+    <figcaption>Figure 5 — The measurement pipeline in <code>hooks/useInterviewAnalyzer.ts</code>.</figcaption>
+  </figure>
+  <div class="box tech"><span class="label">In tech terms</span>
+    <h4>Eye contact</h4>
+    <ul>
+      <li><strong>Head pose</strong>: from MediaPipe’s 4×4 facial transformation matrix (column-major), yaw = asin(−r₂₀) and pitch = atan2(r₂₁, r₂₂).</li>
+      <li><strong>Gaze</strong>: the blendshapes <code>eyeLookIn/Out/Up/Down</code> (0–1) tell whether the eyes are turned away; above 0.55 counts as looking away.</li>
+      <li><strong>Calibration</strong>: the first ~14 steady frames (~2 s) set the candidate’s own baseline yaw/pitch, because webcams sit at different heights. Afterwards a frame counts as eye contact when |yaw − base| ≤ 16°, |pitch − base| ≤ 14° and gaze isn’t away.</li>
+      <li><strong>Blinks</strong> (both <code>eyeBlink</code> &gt; 0.6) keep the previous state, so blinking isn’t penalised.</li>
+      <li><strong>Score</strong> = seconds of eye contact ÷ seconds of camera analysis. Leaving the frame counts against you; face presence is reported separately.</li>
+    </ul>
+    <h4>Posture</h4>
+    <ul>
+      <li>Pose Landmarker gives nose (0) and shoulders (11, 12) with visibility scores; frames only count when both shoulders are visible (&gt; 0.5).</li>
+      <li><strong>Scale-free features</strong>: shoulder width; neck ratio = (shoulder mid-height − nose height) ÷ shoulder width; shoulder tilt angle.</li>
+      <li>After calibrating a baseline, a frame is <em>not upright</em> if tilt &gt; 7° (uneven shoulders), neck ratio &lt; 78% of baseline (slouching / head sinking) or shoulder width &gt; 130% of baseline (hunched too close).</li>
+      <li><strong>Score</strong> = upright seconds ÷ seconds shoulders were visible; reported only with ≥ 10 s of visible shoulders, otherwise “Not measured”.</li>
+    </ul>
+    <h4>Honesty rules</h4>
+    <ul>
+      <li>Time is accumulated per processed frame (capped at 0.5 s per frame so a frozen tab doesn’t inflate numbers).</li>
+      <li>Metrics are sent only if at least 15 s of camera time was analysed; the results page shows exactly how they were measured (e.g. “looking at the screen for 2m 31s of 3m 14s”).</li>
+      <li>MediaPipe’s harmless “INFO: Created TensorFlow Lite XNNPACK delegate” console lines are filtered so they don’t appear as errors.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ 11 ═══════════════════════════════ -->
+<section class="chapter">
+  <h2><span class="num">11</span>The group discussion room: floor control, the queue and AI speakers</h2>
+  <div class="box eli5"><span class="label">Explain like I’m 5</span>
+    <p>Imagine a talking stick. Only the person holding the stick may talk. The teacher (moderator) holds it first and asks a question, then puts the stick on the table — now anyone may reach for it. Whoever reaches first gets it, and everybody else must wait in a line. Nobody can shout over the person holding the stick. When they finish, the stick goes to the next person in line. That is exactly how Blackbox’s GD room works.</p>
+  </div>
+  <figure>
+    <svg viewBox="0 0 720 190" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial" font-size="11">
+      <defs><marker id="e" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#2f5a43"/></marker></defs>
+      <g stroke="#2f5a43" fill="#fff"><rect x="10" y="70" width="90" height="44" rx="22"/><rect x="140" y="70" width="120" height="44" rx="22"/><rect x="300" y="70" width="100" height="44" rx="22" fill="#eef6f0"/><rect x="450" y="70" width="110" height="44" rx="22" fill="#fff7e6"/><rect x="610" y="70" width="100" height="44" rx="22"/></g>
+      <g font-weight="700" text-anchor="middle"><text x="55" y="96">IDLE</text><text x="200" y="96">MODERATOR</text><text x="350" y="96">OPEN</text><text x="505" y="96">LOCKED</text><text x="660" y="96">CLOSED</text></g>
+      <g stroke="#2f5a43" stroke-width="1.5" fill="none" marker-end="url(#e)"><path d="M100 92 H138"/><path d="M260 92 H298"/><path d="M400 86 H448"/><path d="M450 104 C420 140, 380 140, 360 116"/><path d="M350 70 C330 30, 230 30, 210 68"/><path d="M560 92 H608"/></g>
+      <g fill="#55625b" font-size="10"><text x="104" y="84">start</text><text x="262" y="84">opens floor</text><text x="404" y="80">grant head of queue</text><text x="380" y="152">holder releases → next in queue after 0.7 s gap</text><text x="232" y="26">moderator follow-up every 4 turns</text><text x="566" y="84">10 turns</text></g>
+      <text x="10" y="178" fill="#1c2b23" font-size="10.5">While MODERATOR or LOCKED: everyone else is WAITING and requests are rejected. While OPEN: requests join the queue in arrival order.</text>
+    </svg>
+    <figcaption>Figure 6 — The floor-control state machine (<code>lib/gd/floor-control.ts</code>).</figcaption>
+  </figure>
+  <div class="box tech"><span class="label">In tech terms</span>
+    <h4>FloorController — the lock</h4>
+    <ul>
+      <li>A pure TypeScript <strong>state machine</strong> (no timers, no I/O): <code>IDLE → MODERATOR → OPEN ⇄ LOCKED → CLOSED</code>.</li>
+      <li>One <strong>exclusive lock</strong>. In <code>OPEN</code>, <code>request(id)</code> appends to a FIFO <strong>queue</strong>; in <code>LOCKED</code>/<code>MODERATOR</code>, requests are rejected with a reason (<code>locked</code>, <code>not-open</code>…), so nobody can interrupt.</li>
+      <li><strong>Lock tokens</strong>: every grant increments a token. <code>release(token)</code> only works for the current holder’s token — a slow AI reply arriving late can never release or speak under a lock it no longer owns (prevents race conditions).</li>
+      <li>Exposes an immutable snapshot with <code>subscribe/getSnapshot</code>, used by React’s <code>useSyncExternalStore</code> for tear-free rendering.</li>
+    </ul>
+    <h4>DiscussionConductor — the orchestration</h4>
+    <ul>
+      <li>Runs the session on top of the lock: moderator intro → opens the floor → collects requests during a <strong>1.4 s bidding window</strong> → grants the first requester → hand-off to the next queued participant after a <strong>0.7 s gap</strong>.</li>
+      <li><strong>AI bidding</strong>: each agent has an <em>eagerness</em> (0.45–0.75); agents bid after a random 0.9–3.1 s delay, so the human has a fair chance to grab the floor first.</li>
+      <li><strong>Moderator</strong>: a follow-up question every 4 turns; nudges after 7 s of silence; closes after 10 turns.</li>
+      <li><strong>Watchdogs</strong>: a user turn is capped at 120 s and an AI turn at 45 s; every async step uses an <code>AbortController</code> so leaving the room cancels everything cleanly.</li>
+      <li>All I/O (model calls, speech, timers, randomness) is <strong>injected</strong>, so the whole flow is unit-tested deterministically with Vitest fake timers.</li>
+    </ul>
+    <h4>The multi-AI speakers</h4>
+    <table>
+      <tr><th>Panelist</th><th>Personality</th><th>How they talk</th></tr>
+      <tr><td>Alex Chen</td><td>Analytical</td><td>Frames the decision, backs points with simple facts; agrees or disagrees with the last speaker by name.</td></tr>
+      <tr><td>Maya Patel</td><td>Pragmatic</td><td>“In practice…” — what really happens in teams and companies.</td></tr>
+      <tr><td>Ryan Blake</td><td>Contrarian</td><td>Politely takes the opposite side of whoever spoke last.</td></tr>
+      <tr><td>Sam Kim</td><td>Synthesizer</td><td>Names who said what, finds common ground, proposes a middle path.</td></tr>
+      <tr><td>Dr. Raj Mehta</td><td>Moderator</td><td>Introduces the topic, asks follow-ups, nudges and closes.</td></tr>
+    </table>
+    <ul>
+      <li><strong>With Gemini</strong>: the prompt demands everyday words, short sentences (mostly under 15 words), 2–3 sentences max, reacting to the previous speaker by name, and staying strictly on the moderator’s current question. An <strong>on-topic guard</strong> rejects replies that share fewer than two content words with the topic and recent discussion, replacing them with a grounded line.</li>
+      <li><strong>Without Gemini</strong>: each of the 15 topics has a <strong>topic pack</strong> of plain-language pro, con and middle-ground points. Lines are composed from the persona, the stance of the previous speaker (detected by matching the pack or keywords), points not yet used, and natural openers (“Hmm, I’m not fully convinced…”, “On that question…”).</li>
+      <li><strong>Evaluation</strong>: clarity 30%, relevance 30%, collaboration 20%, initiative 20%. Offline, contributions are scored on length, structure words, topic relevance and building on others, and the score is capped unless you spoke at least three times — panels reward consistent presence.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ 12 ═══════════════════════════════ -->
+<section class="chapter">
+  <h2><span class="num">12</span>Practice Hub, dashboard, project review and the coach</h2>
+  <h3>Practice Hub — 500 questions</h3>
+  <div class="box eli5"><span class="label">Explain like I’m 5</span>
+    <p>It’s a library of 500 interview flashcards in 10 shelves: LLMs, ML, MLOps, System Design, DSA, Backend, Frontend, Analytics, Behavioural, Communication. Each card shows the key points, a great answer, a weak answer, why it matters and a tip. You mark cards as “reviewed” or “confident”, and the app remembers.</p>
+  </div>
+  <div class="box tech"><span class="label">In tech terms</span>
+    <ul>
+      <li>Questions live in PostgreSQL (seeded from TypeScript files under <code>prisma/seed-data</code>; a check script verifies 50 per category, no duplicate slugs or texts, 3–4 key points each).</li>
+      <li><code>GET /api/practice</code>: filtered by the user’s track with <code>roleTargets has role OR isEmpty</code> (GIN index), by category, difficulty and search; <strong>cursor pagination</strong>; facet counts; per-user progress joined in.</li>
+      <li>Progress is an upsert on the unique <code>(user, question)</code> pair; an AI grader reviews a typed attempt; the per-question <strong>coach</strong> chat (<code>/api/chat</code>) is persisted in <code>coach_messages</code>.</li>
+    </ul>
+  </div>
+  <h3>Dashboard and track</h3>
+  <ul>
+    <li><strong>Readiness index</strong> = weighted average of available signals: interview average (50%), practice coverage of your track’s core areas (30%; “confident” counts fully, “reviewed” 60%), group-discussion average (20%). Missing signals are left out and the weights renormalised.</li>
+    <li><strong>Track</strong>: chosen at onboarding and switchable anytime from the dashboard header; it is saved to your profile and reshapes the question mix, interview focus, competencies, module order and recommendations.</li>
+  </ul>
+  <h3>Project review</h3>
+  <p>Paste or upload a project write-up; the server asks Gemini for 3–8 tailored questions (or uses six proven generic ones offline), then reviews each of your answers. Text extraction from uploaded files happens in the browser.</p>
+</section>
+
+<!-- ═══════════════════════════════ 13 ═══════════════════════════════ -->
+<section class="chapter">
+  <h2><span class="num">13</span>Testing, quality and running the project</h2>
+  <div class="grid2">
+    <div class="box tech"><span class="label">Quality gates</span>
+      <ul>
+        <li><code>npm run typecheck</code> — TypeScript strict mode</li>
+        <li><code>npm run lint</code> — ESLint incl. React hooks rules</li>
+        <li><code>npm test</code> — Vitest: floor control, conductor, answer signals</li>
+        <li><code>npm run build</code> — production build of every route</li>
+        <li><code>npx tsx scripts/check-question-bank.ts</code> — bank integrity</li>
+      </ul>
+    </div>
+    <div class="box tip"><span class="label">Run it locally</span>
+      <ol>
+        <li>Open the folder in VS Code.</li>
+        <li>Terminal: <code>cd frontend</code></li>
+        <li><code>npm install</code> (first time)</li>
+        <li><code>npm run dev:local</code></li>
+        <li>Open <code>http://localhost:3000</code> → demo account.</li>
+      </ol>
+      <p class="small">Add <code>GEMINI_API_KEY</code> in <code>frontend/.env.local</code> for AI voices, accurate transcripts and model grading.</p>
+    </div>
+  </div>
+  <h3>Deploying to production</h3>
+  <ol>
+    <li>Provision PostgreSQL (e.g. Neon, Supabase, RDS) and set <code>DATABASE_URL</code>.</li>
+    <li>Set Firebase variables, <code>GEMINI_API_KEY</code>, <code>NEXT_PUBLIC_SITE_URL</code>; add the domain to Firebase authorised domains.</li>
+    <li>Release step: <code>npm run db:deploy &amp;&amp; npm run db:seed</code>; then <code>npm run build &amp;&amp; npm start</code> (or Vercel).</li>
+    <li>Point uptime checks at <code>/api/health</code>. Use a shared store (e.g. Redis) for rate limits if running several instances.</li>
+  </ol>
+</section>
+
+<!-- ═══════════════════════════════ 14 ═══════════════════════════════ -->
+<section class="chapter">
+  <h2><span class="num">14</span>Interview question bank about this project</h2>
+  <p>Short, confident answers you can give when someone asks about Blackbox.</p>
+
+  <div class="qa"><p class="q">Q1. Give me a two-minute overview of your project.</p><p class="a">Blackbox is an interview-preparation platform for engineers. It has an adaptive AI mock interviewer, a group-discussion simulator with four AI candidates and strict turn-taking, a 500-question practice bank, and on-device webcam analysis for eye contact and posture. It’s a Next.js 16 app with a PostgreSQL database through Prisma, Firebase sign-in verified on the server, and Google Gemini for AI — with deterministic fallbacks so it works even without the AI. The parts I’m proudest of are the floor-control state machine for discussions and making the delivery metrics genuinely measured rather than estimated.</p></div>
+
+  <div class="qa"><p class="q">Q2. How does the group discussion stop people from interrupting each other?</p><p class="a">A finite state machine with a single exclusive lock. When someone holds the floor the state is LOCKED and every other request is rejected; when the floor is OPEN, requests join a FIFO queue and are granted one at a time with a short hand-off gap. Each grant has an increasing token, and only the current token can release the lock, so a late AI response can’t steal or release the floor.</p></div>
+
+  <div class="qa"><p class="q">Q3. How do you queue participants, and is it fair to the human?</p><p class="a">Requests made during a short bidding window after the floor opens are queued in arrival order. AI agents bid after a random 0.9–3.1 second delay weighted by their eagerness, so a human who speaks up promptly usually gets the floor first, like in a real GD.</p></div>
+
+  <div class="qa"><p class="q">Q4. How do multiple AI speakers stay distinct and on topic?</p><p class="a">Each agent has a persona (analytical, pragmatic, contrarian, synthesizer), its own voice, pitch and pace, and its own Gemini voice when available. The prompt forces plain, short, on-topic replies that react to the previous speaker; a server-side check rejects off-topic replies. Offline, lines are built from hand-written topic packs of pro, con and middle-ground points.</p></div>
+
+  <div class="qa"><p class="q">Q5. How do you calculate eye contact? Isn’t it just a dummy number?</p><p class="a">No, it’s measured. MediaPipe’s face landmarker runs in the browser about seven times a second. Each frame I compute head yaw and pitch from the face transformation matrix and check the eye-gaze blendshapes, compared to a baseline calibrated in the first two seconds. Eye contact is the seconds looking at the screen divided by the seconds analysed. Posture works the same way with shoulder tilt, neck height relative to shoulder width, and distance. Video never leaves the device.</p></div>
+
+  <div class="qa"><p class="q">Q6. What happens if Gemini is down or you have no API key?</p><p class="a">Every AI call has a timeout and schema validation, and every feature catches the failure and uses deterministic logic: questions from the practice bank filtered by track and level, a transparent heuristic rubric, topic packs for discussions, and generic project questions. The UI labels heuristic scores honestly.</p></div>
+
+  <div class="qa"><p class="q">Q7. How does the interviewer adapt to the candidate?</p><p class="a">After each answer the server reads signals — “don’t know”, help requests, project mentions with specific technologies, nervousness. Then it chooses from allowed moves: coach with hints and allow one retry, ask a follow-up about the project’s technology, or acknowledge specifically and move on. Difficulty follows experience level and the profile’s focus areas come first. The model chooses within those rules and the server enforces them.</p></div>
+
+  <div class="qa"><p class="q">Q8. Why PostgreSQL and not MongoDB?</p><p class="a">The data is relational: users own sessions, progress links users and questions, and I need constraints, transactions and cascading deletes. Postgres also gives JSONB for transcripts, arrays and GIN indexes for track filtering — so I get document flexibility where I need it without giving up relational guarantees.</p></div>
+
+  <div class="qa"><p class="q">Q9. How do you prevent duplicate answer submissions?</p><p class="a">Two layers. The client sends the interviewer-turn number it is answering; a mismatched number returns 409. And writes use optimistic concurrency: the update only applies if the row’s updated-at timestamp is unchanged, so two concurrent submits can’t both be written.</p></div>
+
+  <div class="qa"><p class="q">Q10. How is authentication secured?</p><p class="a">Firebase handles sign-in; the client sends the ID token on every request; the server verifies the JWT’s RS256 signature, issuer, audience and expiry with Google’s public keys using jose. Every query is scoped to the user’s ID, so even guessing another session’s ID returns 404.</p></div>
+
+  <div class="qa"><p class="q">Q11. How did you make speech recognition more accurate?</p><p class="a">Three things: setting the recognizer to the candidate’s accent such as en-IN, restarting immediately when the browser ends a session so words aren’t lost, and — when Gemini is configured — recording the answer as 16 kHz WAV in the browser and getting an accurate server transcription that also knows the question, so technical terms are spelled correctly.</p></div>
+
+  <div class="qa"><p class="q">Q12. Why does the AI voice sound more natural?</p><p class="a">I rank voices by quality, preferring neural voices, and speak sentence by sentence with small varied pauses and slight rate variation instead of one flat utterance. With Gemini, I use its TTS voices with a speaking style prompt.</p></div>
+
+  <div class="qa"><p class="q">Q13. How is the readiness index calculated?</p><p class="a">A weighted average of the signals that exist: interview average 50%, practice coverage of the track’s core areas 30%, group-discussion average 20%; missing signals are excluded and weights renormalised, so new users aren’t penalised for features they haven’t tried.</p></div>
+
+  <div class="qa"><p class="q">Q14. How do you protect the API from abuse and cost spikes?</p><p class="a">Per-IP rate limits in the edge proxy with a stricter budget for AI routes, body-size limits, strict validation, and timeouts on model calls. The Gemini key is only used server-side and sent in a header.</p></div>
+
+  <div class="qa"><p class="q">Q15. How did you test timing-heavy code like the discussion room?</p><p class="a">The conductor receives all its dependencies — model calls, speech, clock, randomness — through injection, so tests drive it with Vitest fake timers and fake agents and assert exact sequences: who gets the floor, that interruptions are rejected, hand-offs, and the transcript at the end.</p></div>
+
+  <div class="qa"><p class="q">Q16. What would you improve next?</p><p class="a">A shared rate-limit store for multi-instance deploys, real-time multiplayer GD with WebSockets so real candidates can join, server-side streaming of model replies to cut perceived latency, and analytics on which questions candidates struggle with to personalise practice.</p></div>
+
+  <div class="qa"><p class="q">Q17. How do you handle user privacy?</p><p class="a">Video analysis runs on-device and only percentages are stored; recorded answer audio is transcribed in memory and not stored; users can delete their account and all data in one action thanks to cascading foreign keys; and the privacy page documents exactly which processors are used.</p></div>
+
+  <div class="qa"><p class="q">Q18. Why Next.js instead of a separate frontend and backend?</p><p class="a">One codebase and one deployment, shared TypeScript types and zod schemas between client and server, server rendering for a fast landing page, and route handlers that are enough for this API. It’s a modular monolith that could be split later.</p></div>
+</section>
+
+<!-- ═══════════════════════════════ 15 ═══════════════════════════════ -->
+<section class="chapter">
+  <h2><span class="num">15</span>Glossary</h2>
+  <table>
+    <tr><th style="width:22%">Term</th><th style="width:38%">Like I’m 5</th><th>In tech terms</th></tr>
+    <tr><td>API</td><td>A menu of things one program can ask another to do.</td><td>A defined set of HTTP endpoints with request/response formats.</td></tr>
+    <tr><td>JWT / ID token</td><td>A signed sticker proving who you are.</td><td>A base64 JSON token signed with RS256; verified with the issuer’s public keys (JWKS).</td></tr>
+    <tr><td>State machine</td><td>Rules saying which “mode” comes after which.</td><td>A finite set of states with explicit allowed transitions.</td></tr>
+    <tr><td>Mutex / lock</td><td>The talking stick.</td><td>Mutual exclusion: only one holder at a time.</td></tr>
+    <tr><td>Queue (FIFO)</td><td>A line — first come, first served.</td><td>First-in, first-out ordering of pending requests.</td></tr>
+    <tr><td>Race condition</td><td>Two people grabbing the same toy at once.</td><td>Outcome depends on timing of concurrent operations; prevented with tokens and atomic writes.</td></tr>
+    <tr><td>Optimistic concurrency</td><td>“Only save if nobody changed it since I looked.”</td><td>Conditional update on a version/timestamp; conflicts return 409.</td></tr>
+    <tr><td>Migration</td><td>Instructions to rearrange the notebook safely.</td><td>Versioned SQL that changes the schema.</td></tr>
+    <tr><td>Seed</td><td>Filling the library with the first books.</td><td>Idempotent script inserting reference data.</td></tr>
+    <tr><td>GIN index</td><td>An index at the back of a book for lists.</td><td>Generalized Inverted Index for arrays/JSONB containment queries.</td></tr>
+    <tr><td>LLM</td><td>A program that learned language from lots of text.</td><td>Large language model predicting the next token; here Google Gemini.</td></tr>
+    <tr><td>Fallback</td><td>Plan B when plan A fails.</td><td>Deterministic code path used on timeout, error or invalid output.</td></tr>
+    <tr><td>WASM</td><td>A way to run fast code inside the browser.</td><td>WebAssembly: compiled binary code executed by the browser; MediaPipe uses it.</td></tr>
+    <tr><td>Landmarks / blendshapes</td><td>Dots on your face; sliders for each expression.</td><td>478 3-D face points; 52 coefficients for expressions like eyeLookOut or mouthSmile.</td></tr>
+    <tr><td>Yaw / pitch</td><td>Turning your head left-right / nodding up-down.</td><td>Rotation angles derived from the head transformation matrix.</td></tr>
+    <tr><td>TTS / STT</td><td>Computer mouth / computer ears.</td><td>Text-to-speech / speech-to-text.</td></tr>
+    <tr><td>Rate limiting</td><td>“Only 20 questions a minute, please.”</td><td>Restricting requests per client per time window; 429 when exceeded.</td></tr>
+    <tr><td>Idempotent</td><td>Pressing the lift button twice still calls one lift.</td><td>Repeating an operation has the same effect as doing it once.</td></tr>
+    <tr><td>Cascade delete</td><td>Removing a folder removes the papers in it.</td><td>Foreign-key action deleting child rows with the parent.</td></tr>
+  </table>
+  <p class="small" style="margin-top:6mm">Blackbox project guide · generated from the source code in <code>frontend/</code>. When the code changes, update this guide alongside it.</p>
+</section>
+
+</div>
+</body>
+</html>

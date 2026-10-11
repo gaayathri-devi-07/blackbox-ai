@@ -7,7 +7,11 @@ const GLOBAL_API_LIMIT = { limit: 120, windowMs: 60_000 };
 // Tighter limit for AI-heavy endpoints (to protect API key spend)
 const AI_ENDPOINT_LIMIT = { limit: 20, windowMs: 60_000 };
 
-const AI_ROUTES = ["/api/chat", "/api/interview", "/api/gd", "/api/project"];
+// Only writes to these routes call the model; reads (results, history) use the general limit.
+const AI_ROUTES = ["/api/chat", "/api/interview", "/api/gd", "/api/project", "/api/practice", "/api/transcribe", "/api/agents"];
+
+// Speech synthesis runs once per spoken line, so it gets its own, larger budget.
+const TTS_LIMIT = { limit: 60, windowMs: 60_000 };
 
 export default function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -25,10 +29,11 @@ export default function proxy(request: NextRequest) {
 
   // ── 2. Rate limiting on all /api/ routes ────────────────────────────────────
   if (pathname.startsWith("/api/")) {
-    const isAiRoute = AI_ROUTES.some((r) => pathname.startsWith(r));
-    const config = isAiRoute ? AI_ENDPOINT_LIMIT : GLOBAL_API_LIMIT;
+    const isTts = request.method === "POST" && pathname.startsWith("/api/tts");
+    const isAiRoute = !isTts && request.method === "POST" && AI_ROUTES.some((r) => pathname.startsWith(r));
+    const config = isTts ? TTS_LIMIT : isAiRoute ? AI_ENDPOINT_LIMIT : GLOBAL_API_LIMIT;
     const { allowed, remaining, resetAt } = checkRateLimit(
-      `${ip}:${isAiRoute ? "ai" : "api"}`,
+      `${ip}:${isTts ? "tts" : isAiRoute ? "ai" : "api"}`,
       config
     );
 
